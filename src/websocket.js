@@ -1,18 +1,25 @@
-import {addMessage} from "./message";
-import {giveCookieId} from "./cookie";
+import {addMessage, giveCookieId, addFriendInfo } from "./message";
 
 const socket = new WebSocket("ws://localhost:8999");
 const messageText = document.querySelector('#messageText');
 const sendButton = document.querySelector('#sendMessage');
 let myId;
 
-socket.addEventListener('message', function (event) {
-    if (myId !== undefined) {
-    addMessage(event.data, myId);
+socket.addEventListener('message',  function (event) {
+    if (event.data.includes('nickname')) {
+        addFriendInfo(event.data).then(r => {
+            console.log(r, 'websocket.js, ADDFRIENDINFO СРАБОТАЛ')
+        });
     } else {
-        myId = Number(event.data);
-        giveCookieId(event.data);
-        console.log(`Текущее ID пользователя: ${myId}`)
+        if (myId !== undefined) {
+            addMessage(event.data, myId);
+        } else {
+            myId = Number(event.data);
+            giveCookieId(event.data).then(info => {
+                socket.send(info);
+            });
+            console.warn(`Текущее ID пользователя: ${myId}`);
+        }
     }
 });
 

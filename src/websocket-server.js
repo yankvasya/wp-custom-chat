@@ -13,11 +13,17 @@ webSocketServer.on('connection', function(ws) {
     clients[id].send(id)
 
     ws.on('message', function(message) {
-        const info = {
-            message: message.toString(),
-            id: id
-        }
         console.log(`Сообщение получено: '${message}' от пользователя с id ${id}`);
+        let info;
+        if (message.includes('nickname')) {
+            info = message.toString();
+        } else {
+            info = {
+                message: message.toString(),
+                id: id
+            }
+        }
+
         for(const key in clients) {
             clients[key].send(JSON.stringify(info));
         }

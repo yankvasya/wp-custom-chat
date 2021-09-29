@@ -1,5 +1,7 @@
 require('./index.html')
 
+import {giveNickname} from "./message";
+
 window.addEventListener('load', () => {
     const login = document.querySelector('#login');
     const errorSpan = document.querySelector('.login__error');
@@ -49,6 +51,7 @@ window.addEventListener('load', () => {
 
 });
 
+// Валидатный никнейм?
 function validateNickname(nickname) {
    try {
        let result = true;
@@ -72,18 +75,20 @@ function validateNickname(nickname) {
    }
 }
 
+// Анимашка загрузки :)
 async function animateLoading(nickname) {
     return new Promise((resolve, reject) => {
         let tId;
         let i = 0;
         let position = 64; // start position
-        const interval = 35; //100 ms of interval for the setInterval()
+        const interval = 10; //10 ms of interval for the setInterval()
         const spinner = document.getElementById('loginLoading');
         spinner.classList.remove('hide');
 
         tId = setInterval(() => {
             if (i === 100) {
                 spinner.classList.add('hide');
+                giveNickname(nickname);
                 resolve(nickname); // Возвращает никнейм
                 clearInterval(tId);
             }

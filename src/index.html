@@ -25,7 +25,7 @@
             <div class="chat">
                 <div class="chat__header">
                     <h3 class="chat__title">Чат</h3>
-                    <div class="chat__members">~ участника</div>
+                    <div class="chat__members">1 участник</div>
                 </div>
                 <ul id="messageContainer" class="chat__all-messages">
 <!--                    Добавляй элементы сюда-->
@@ -54,8 +54,8 @@
         </div>
 
 <!--        hide-->
-        <div class="login hide">
-            <img class="login__img" src="https://bit.ly/3EYFQ1W" alt="login img">
+        <div class="login">
+            <img class="login__img" src="https://i.ibb.co/FxBFRxc/Group-1.png" alt="login img">
             <h2 class="login__title">Авторизация</h2>
             <p class="login__text">Введите пожалуйста свой ник для дальнейшей авторизации</p>
             <label><input autocomplete="off" class="login__input" id="loginInput" name="nickname" type="text" placeholder="Введите свой ник"> </label>
@@ -66,7 +66,7 @@
     </div>
 
     <script type="text" id="addFullMessageTemplate">
-        <h4 class="member__nickname">{{id}}</h4>
+        <h4 class="member__nickname">{{nickname}}</h4>
         <div class="member__message">{{message}}</div>
     </script>
     <script type="text" id="addMessageTemplate">

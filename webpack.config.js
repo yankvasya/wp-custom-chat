@@ -2,17 +2,16 @@ const path =require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+// const template = require("./file.handlebars");
 
 module.exports = (env, args) => {
     const isProd = args.mode === 'production';
 
     const config = {
         entry: {
-            // bundle: ['./src/style.scss', './src/app.js'],
-            style: ['./node_modules/reseter.css/css/reseter.css','./src/style.scss'],
-            script: './src/main.js',
-            // maps: 'https://api-maps.yandex.ru/2.1/?lang=ru_RU'
-            // about: './src/about.js',
+            style: ['./src/style.scss'],
+            script: ['./src/main.js', './src/websocket.js'],
+            templates: ['./src/message.js'],
         },
         output: {
             path: path.resolve(__dirname, 'docs'),
@@ -39,6 +38,11 @@ module.exports = (env, args) => {
                     test: /\.html$/i,
                     loader: 'html-loader',
                 },
+                {
+                    test: /\.(jpe?g|png|gif|svg)$/i,
+                    loader:'file-loader'
+                },
+                // { test: /\.handlebars$/, loader: "handlebars-loader" }
             ],
         },
         plugins: [
@@ -46,13 +50,8 @@ module.exports = (env, args) => {
             new HtmlWebpackPlugin({
                 filename: 'index.html',
                 template: './src/index.html',
-                chunks: ['style', 'script']
+                chunks: ['style', 'script', 'templates']
             }),
-            // new HtmlWebpackPlugin({
-            //     filename: 'about.html',
-            //     template: './src/about.html',
-            //     chunks: ['vendors', 'about']
-            // }),
         ],
         optimization: {
             runtimeChunk: 'single'

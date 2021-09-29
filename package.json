@@ -1,5 +1,5 @@
 {
-  "name": "wp-project",
+  "name": "wp-custom-chat",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -24,6 +24,9 @@
     "webpack-dev-server": "^4.2.1"
   },
   "dependencies": {
-    "reseter.css": "^2.0.0"
+    "handlebars": "^4.7.7",
+    "handlebars-loader": "^1.7.1",
+    "reseter.css": "^2.0.0",
+    "ws": "^8.2.2"
   }
 }

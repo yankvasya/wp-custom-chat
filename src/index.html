@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CUSTOM CHAT | WP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container visible">
+<!--            hide-->
+            <aside class="aside hidden">
+                <ul class="aside__button">
+                    <li class="button__element"></li>
+                    <li class="button__element"></li>
+                    <li class="button__element"></li>
+                </ul>
+            </aside>
+
+            <div class="chat">
+                <div class="chat__header">
+                    <h3 class="chat__title">Чат</h3>
+                    <div class="chat__members">~ участника</div>
+                </div>
+                <ul id="messageContainer" class="chat__all-messages">
+<!--                    Добавляй элементы сюда-->
+<!--                    <li class="member friend">-->
+<!--                        <h4 class="member__nickname">Boroda23</h4>-->
+<!--                        <div class="member__message">Привет</div>-->
+<!--                        <div class="member__message">Как дела?</div>-->
+<!--                    </li>-->
+<!--                    <li class="member me">-->
+<!--                        <h4 class="member__nickname">Nik</h4>-->
+<!--                        <div class="member__message">Привет!</div>-->
+<!--                        <div class="member__message">Хорошо</div>-->
+<!--                        <div class="member__message">Как у тебя дела?</div>-->
+<!--                    </li>-->
+<!--                    <li class="member friend">-->
+<!--                        <h4 class="member__nickname">Boroda23</h4>-->
+<!--                        <div class="member__message">У меня тоже все хорошо</div>-->
+<!--                        <div class="member__message">Рад был пообщаться</div>-->
+<!--                    </li>-->
+                </ul>
+                <div class="messaging">
+                    <label class="messaging__input-label"><input autocomplete="off" id="messageText" name="nickname" type="text" placeholder="Введите сообщение..." class="messaging__input"></label>
+                    <button id="sendMessage" type="submit" class="messaging__send-button">Отправить</button>
+                </div>
+            </div>
+        </div>
+
+<!--        hide-->
+        <div class="login hide">
+            <img class="login__img" src="https://bit.ly/3EYFQ1W" alt="login img">
+            <h2 class="login__title">Авторизация</h2>
+            <p class="login__text">Введите пожалуйста свой ник для дальнейшей авторизации</p>
+            <label><input autocomplete="off" class="login__input" id="loginInput" name="nickname" type="text" placeholder="Введите свой ник"> </label>
+            <button class="login__submit" type="submit" id="login">Войти</button>
+            <span class="login__error"></span>
+            <div id="loginLoading" class="login__loading hide"></div>
+        </div>
+    </div>
+
+    <script type="text" id="addFullMessageTemplate">
+        <h4 class="member__nickname">{{id}}</h4>
+        <div class="member__message">{{message}}</div>
+    </script>
+    <script type="text" id="addMessageTemplate">
+        <div class="member__message">{{message}}</div>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+</body>
+</html>

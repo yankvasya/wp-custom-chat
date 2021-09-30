@@ -181,13 +181,13 @@ h1 {
   display: flex;
   flex-direction: column;
   width: 32%;
+  min-width: 77px;
   background: #17212B;
-  transition: width 0.5s cubic-bezier(1,-0.27,0,1.28);
+  transition: width 0.5s cubic-bezier(.7,-0.36,.26,1.37);
 
   &.hidden {
     width: 4%;
-    min-width: 77px;
-    transition: width 0.5s cubic-bezier(1,-0.27,0,1.28);
+    transition: width 0.5s cubic-bezier(.7,-0.36,.26,1.37);
   }
 
   &__button {

@@ -233,7 +233,6 @@ h1 {
     padding: 13px 16px 9px;
     display: flex;
     flex-direction: column;
-    height: 57px;
     border-left: 1px solid  #0E1621;
     background: #17212B;
 
@@ -272,12 +271,28 @@ h1 {
       display: flex;
       margin-top: 4px;
 
+      .message {
+        &__text {
+
+        }
+
+        &__time {
+          cursor: pointer;
+          margin: 5px 0 0 9px;
+          font-style: normal;
+          font-weight: 300;
+          font-size: 14px;
+          line-height: 16px;
+          color: #7F91A4;
+        }
+      }
+
 
       &:first-child {
         margin-top: 7px;
       }
 
-      padding: 8px 55px 9px 11px;
+      padding: 8px 7.5px 4px 11px;
       font-style: normal;
       font-weight: 300;
       font-size: 14px;

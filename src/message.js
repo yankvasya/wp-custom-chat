@@ -13,6 +13,14 @@ export function addMessage(message, id) {
     const messageItem = document.createElement('li');
     const messageContainer = document.querySelector('#messageContainer');
     const parsedMessage = JSON.parse(message);
+
+    const currentTime = `${new Date().getHours()}:${new Date().getMinutes()}`;
+    const currentFullDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDay()}T${currentTime}`;
+    const fullTime = {
+        fullDate: currentFullDate,
+        currentTime: currentTime
+    };
+
     const lastElement = messageContainer.lastElementChild;
     const newCookie = `{"${document.cookie.split('; ').join('" "').split('=').join('":"').split(' ').join(', ')}"}`;
     const parsedCookie = JSON.parse(newCookie);
@@ -32,8 +40,8 @@ export function addMessage(message, id) {
         // В ином случае используется html = обычный template
         html =
             lastElement === null || lastElement.classList.contains('friend')
-                ? templateFull(Object.assign(parsedCookie, parsedMessage))
-                : template(Object.assign(parsedCookie, parsedMessage));
+                ? templateFull(Object.assign(parsedCookie, parsedMessage, fullTime))
+                : template(Object.assign(parsedCookie, parsedMessage, fullTime));
 
         // Если последнее сообщение было от друга или сообщения вовсе отсутствуют, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
@@ -46,10 +54,13 @@ export function addMessage(message, id) {
     } else {
         // Если сообщения вовсе отсутствуют или последнее было от МЕНЯ, то используется templateFull(с никнеймом и именем)
         // В ином случае используется html = обычный template
+        // const currentNickname = anotherInfo.forEach((el) => {
+        //     console.log(el)
+        // })
         html =
             lastElement === null || lastElement.classList.contains('me')
-                ? templateFull(Object.assign({nickname: 'Друг'}, parsedMessage))
-                : template(Object.assign({nickname: 'Друг'}, parsedMessage));
+                ? templateFull(Object.assign({nickname: 'Друг'}, parsedMessage, fullTime))
+                : template(Object.assign({nickname: 'Друг'}, parsedMessage, fullTime));
 
         // Если последнее сообщение было от меня или сообщения вовсе отсутствуют,, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
@@ -95,7 +106,8 @@ export function addFriendInfo(message) {
         anotherInfo.friends.push(parsedMessage);
 
         refreshOnline(anotherInfo.friends).then((r) => {
-            console.log('12313')
+            console.log('Значение текущего онлайна обновлено');
+            resolve('Значение текущего онлайна обновлено; addFriendInfo');
         });
 
         function parse(mess) {
@@ -112,21 +124,20 @@ export function addFriendInfo(message) {
 async function refreshOnline(friends, number){
     return new Promise((resolve, reject) => {
         const num = friends !== undefined && friends !== null ? friends.length : number;
-        console.log(num)
-
         const onlineNumbers = document.querySelector('.chat__members');
         const text = ['участник', 'участника', 'участников'];
 
+
         function variables(num) {
-            if (num === 1 && num === 21) {
+            if (num === 1 || num === 21) {
                 onlineNumbers.innerText = `${num} ${text[0]}`; // -К
                 resolve(text[0]);
             }
-            if (num > 1 && num < 5 && 21 < num < 25) {
+            if (num > 1 || num < 5 || 21 < num < 25) {
                 onlineNumbers.innerText = `${num} ${text[1]}`; // -А
                 resolve(text[1]);
             }
-            if (num > 10 && num < 20 && num >= 25 && num === 0) {
+            if (num > 10 || num < 20 || num >= 25 || num === 0) {
                 onlineNumbers.innerText = `${num} ${text[2]}`; // -ОВ
                 resolve(text[2]);
             }

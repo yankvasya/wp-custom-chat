@@ -25,13 +25,16 @@
             <div class="chat">
                 <div class="chat__header">
                     <h3 class="chat__title">Чат</h3>
-                    <div class="chat__members">1 участник</div>
+                    <div class="chat__members">0 участников</div>
                 </div>
                 <ul id="messageContainer" class="chat__all-messages">
 <!--                    Добавляй элементы сюда-->
 <!--                    <li class="member friend">-->
 <!--                        <h4 class="member__nickname">Boroda23</h4>-->
-<!--                        <div class="member__message">Привет</div>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">Привет</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:30">21:30</time>-->
+<!--                        </div>-->
 <!--                        <div class="member__message">Как дела?</div>-->
 <!--                    </li>-->
 <!--                    <li class="member me">-->
@@ -67,10 +70,16 @@
 
     <script type="text" id="addFullMessageTemplate">
         <h4 class="member__nickname">{{nickname}}</h4>
-        <div class="member__message">{{message}}</div>
+        <div class="member__message message">
+        <div class="message__text">{{message}}</div>
+        <time class="message__time" datetime={{fullDate}}>{{currentTime}}</time>
+        </div>
     </script>
     <script type="text" id="addMessageTemplate">
-        <div class="member__message">{{message}}</div>
+        <div class="member__message message">
+        <div class="message__text">{{message}}</div>
+        <time class="message__time" datetime={{fullDate}}>{{currentTime}}</time>
+        </div>
     </script>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 </body>

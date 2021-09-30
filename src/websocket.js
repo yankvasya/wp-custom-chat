@@ -8,7 +8,7 @@ let myId;
 socket.addEventListener('message',  function (event) {
     if (event.data.includes('nickname')) {
         addFriendInfo(event.data).then(r => {
-            console.log(r, 'websocket.js, ADDFRIENDINFO СРАБОТАЛ');
+            console.log(r, 'websocket.js, addFriendInfo|');
         });
     } else {
         if (myId !== undefined) {

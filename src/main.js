@@ -88,7 +88,7 @@ function validateNickname(nickname) {
 
 // Анимашка загрузки :)
 async function animateLoading(nickname) {
-    return new Promise((resolve) => {
+    return new Promise((resolve ) => {
         let tId;
         let i = 0;
         let position = 64; // start position

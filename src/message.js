@@ -3,7 +3,7 @@ let personInfo = {
     nickname: ''
 };
 
-const anotherInfo = {
+let anotherInfo = {
     friends: [
 
     ],
@@ -15,7 +15,7 @@ export function addMessage(message, id) {
     const messageContainer = document.querySelector('#messageContainer');
     const parsedMessage = JSON.parse(message);
 
-    const currentTime = `${new Date().getHours()}:${new Date().getMinutes()}`;
+    const currentTime = `${new Date().getHours() >= 10 ? new Date().getHours() : '0' + new Date().getHours()}:${new Date().getMinutes() >= 10 ? new Date().getMinutes() : '0' + new Date().getMinutes()}`;
     const currentFullDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDay()}T${currentTime}`;
     const fullTime = {
         fullDate: currentFullDate,
@@ -62,13 +62,13 @@ export function addMessage(message, id) {
             }
         });
         html =
-            lastElement === null || lastElement.classList.contains('me') || lastElement.classList.contains('join')
+            lastElement === null || lastElement.classList.contains('me') || lastElement.classList.contains('join') || lastElement.firstElementChild.textContent !== whoSend
                 ? templateFull(Object.assign({nickname: whoSend}, parsedMessage, fullTime))
                 : template(Object.assign({nickname: whoSend}, parsedMessage, fullTime));
 
         // Если последнее сообщение было от меня или сообщения вовсе отсутствуют,, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
-        if (lastElement === null || lastElement.classList.contains('me') || lastElement.classList.contains('join')) {
+        if (lastElement === null || lastElement.classList.contains('me') || lastElement.classList.contains('join') || lastElement.firstElementChild.textContent !== whoSend) {
             messageItem.classList.add('friend');
             messageContainer.appendChild(messageItem);
         } else {
@@ -99,8 +99,8 @@ export function giveCookieId(id) {
 // При вводе ника обновляется число пользователей в чате
 export function giveNickname(nickname) {
     personInfo.nickname = nickname;
-    refreshOnline(null,anotherInfo.online++).then(r => {
-        console.log('Себя в список онлайна добавили', r)
+    refreshOnline(null, ++anotherInfo.online).then(r => {
+        console.log('Себя в список онлайна добавил |', r)
     })
 }
 
@@ -145,12 +145,15 @@ async function refreshOnline(friends, number){
             if (num === 1 || num === 21) {
                 onlineNumbers.innerText = `${num} ${text[0]}`; // -К
                 resolve(text[0]);
+                return;
             }
             if (num > 1 || num < 5 || 21 < num < 25) {
                 onlineNumbers.innerText = `${num} ${text[1]}`; // -А
                 resolve(text[1]);
+                return;
             }
             if (num > 10 || num < 20 || num >= 25 || num === 0) {
+                console.log(num)
                 onlineNumbers.innerText = `${num} ${text[2]}`; // -ОВ
                 resolve(text[2]);
             }

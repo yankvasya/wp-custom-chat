@@ -104,10 +104,10 @@ export function addFriendInfo(message) {
         let parsedMessage;
         parse(message);
         anotherInfo.friends.push(parsedMessage);
+        joinedTheChat(parsedMessage.nickname);
 
         refreshOnline(anotherInfo.friends).then((r) => {
-            console.log('Значение текущего онлайна обновлено');
-            resolve('Значение текущего онлайна обновлено; addFriendInfo');
+            resolve('Значение текущего онлайна обновлено;');
         });
 
         function parse(mess) {
@@ -119,6 +119,13 @@ export function addFriendInfo(message) {
             }
         }
     })
+}
+
+function joinedTheChat(nickname) {
+    const messageContainer = document.querySelector('#messageContainer');
+    const div = `<li class="member"><div class="member__join"><div>${nickname} присоединился к чату</div></div></li>`;
+    messageContainer.insertAdjacentHTML('beforeend', div);
+    messageContainer.scrollTop = messageContainer.scrollHeight;
 }
 
 async function refreshOnline(friends, number){

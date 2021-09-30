@@ -267,6 +267,19 @@ h1 {
     flex-direction: column;
     margin-top: 9px;
 
+    &__join {
+      display: flex;
+      justify-content: center;
+
+      div {
+        user-select: none;
+        background-color: rgba(28, 47, 110, 0.53);
+        color: #ababab;
+        padding: 3px 10px;
+        border-radius: 10px;
+      }
+    }
+
     &__message {
       display: flex;
       margin-top: 4px;

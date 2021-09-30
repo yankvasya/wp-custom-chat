@@ -4,39 +4,21 @@ import {giveNickname} from "./message";
 
 window.addEventListener('load', () => {
     const login = document.querySelector('#login');
-    const errorSpan = document.querySelector('.login__error');
     const loginInput = document.querySelector('#loginInput');
 
     loginInput.addEventListener('input', () => {
+        const errorSpan = document.querySelector('.login__error');
         errorSpan.classList.remove('visible');
     })
 
+    loginInput.addEventListener('keyup', (e) => {
+        if(e.key === 'Enter') {
+            auth(e);
+        }
+    });
+
     login.addEventListener('click', (e) => {
-       e.preventDefault();
-        const nickname = login.previousElementSibling.children[0].value;
-
-        const nickIsValid = validateNickname(nickname);
-
-       if (nickIsValid === true) {
-           animateLoading(nickname)
-               .then((nickname) => {
-               // Когда загрузка пройдет, вернется resolve и запустится then
-                   document.cookie = `nickname=${nickname}`;
-                   const loginWindow = document.querySelector('.login');
-                   const container = document.querySelector('.container');
-                   loginWindow.classList.add('hide');
-                   container.classList.remove('hide')
-                   setTimeout(() => {
-                       loginWindow.classList.add('none');
-                       container.classList.add('visible');
-                   }, 300);
-                   // console.log(nickname);
-           });
-
-       } else {
-           errorSpan.innerHTML = `*- ${nickIsValid}`;
-           errorSpan.classList.add('visible');
-       }
+        auth(e);
     });
 
     const closeAside = document.querySelector('.aside__button');
@@ -48,8 +30,37 @@ window.addEventListener('load', () => {
             aside.classList.add('hidden');
         }
     });
-
 });
+
+// Полный цикл авторизации
+function auth(e) {
+    e.preventDefault();
+    const errorSpan = document.querySelector('.login__error');
+    const login = document.querySelector('#login');
+    const nickname = login.previousElementSibling.children[0].value;
+
+    const nickIsValid = validateNickname(nickname);
+
+    if (nickIsValid === true) {
+        animateLoading(nickname)
+            .then((nickname) => {
+                // Когда загрузка пройдет, вернется resolve и запустится then
+                document.cookie = `nickname=${nickname}`;
+                const loginWindow = document.querySelector('.login');
+                const container = document.querySelector('.container');
+                loginWindow.classList.add('hide');
+                container.classList.remove('hide')
+                setTimeout(() => {
+                    loginWindow.classList.add('none');
+                    container.classList.add('visible');
+                }, 300);
+            });
+
+    } else {
+        errorSpan.innerHTML = `*- ${nickIsValid}`;
+        errorSpan.classList.add('visible');
+    }
+}
 
 // Валидатный никнейм?
 function validateNickname(nickname) {
@@ -57,15 +68,15 @@ function validateNickname(nickname) {
        let result = true;
 
        if (nickname === '') {
-           throw new Error('Пустое поле!');
+           new Error('Пустое поле!');
        }
 
        if (!isNaN(Number([...nickname][0]))) {
-           throw new Error('Не должно начинаться с цифры!');
+           new Error('Не должно начинаться с цифры!');
        }
 
        if (nickname.length < 5 ) {
-           throw new Error('Меньше 5 знаков!');
+           new Error('Меньше 5 знаков!');
        }
 
        return result
@@ -77,7 +88,7 @@ function validateNickname(nickname) {
 
 // Анимашка загрузки :)
 async function animateLoading(nickname) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         let tId;
         let i = 0;
         let position = 64; // start position

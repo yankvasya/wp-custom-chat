@@ -39,13 +39,13 @@ export function addMessage(message, id) {
         // Если сообщения вовсе отсутствуют или последнее было от друга, то используется templateFull(с никнеймом и именем)
         // В ином случае используется html = обычный template
         html =
-            lastElement === null || lastElement.classList.contains('friend')
+            lastElement === null || lastElement.classList.contains('friend') || lastElement.classList.contains('join')
                 ? templateFull(Object.assign(parsedCookie, parsedMessage, fullTime))
                 : template(Object.assign(parsedCookie, parsedMessage, fullTime));
 
         // Если последнее сообщение было от друга или сообщения вовсе отсутствуют, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
-        if (lastElement === null || lastElement.classList.contains('friend')) {
+        if (lastElement === null || lastElement.classList.contains('friend') || lastElement.classList.contains('join')) {
             messageItem.classList.add('me');
             messageContainer.appendChild(messageItem);
         } else {
@@ -58,13 +58,13 @@ export function addMessage(message, id) {
         //     console.log(el)
         // })
         html =
-            lastElement === null || lastElement.classList.contains('me')
+            lastElement === null || lastElement.classList.contains('me') || lastElement.classList.contains('join')
                 ? templateFull(Object.assign({nickname: 'Друг'}, parsedMessage, fullTime))
                 : template(Object.assign({nickname: 'Друг'}, parsedMessage, fullTime));
 
         // Если последнее сообщение было от меня или сообщения вовсе отсутствуют,, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
-        if (lastElement === null || lastElement.classList.contains('me')) {
+        if (lastElement === null || lastElement.classList.contains('me') || lastElement.classList.contains('join')) {
             messageItem.classList.add('friend');
             messageContainer.appendChild(messageItem);
         } else {
@@ -79,7 +79,7 @@ export function addMessage(message, id) {
 // Мне кажется, стоило бы использовать sessionStorage, нежели Cookie или localStorage
 export function giveCookieId(id) {
     // Выжидает какой никнейм ведет пользователь, чтобы в далнейшем сообщить об этом другим пользователям уже в websocket.js
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         document.cookie = `id=${id}`
         personInfo.id = Number(id);
 
@@ -95,19 +95,19 @@ export function giveCookieId(id) {
 export function giveNickname(nickname) {
     personInfo.nickname = nickname;
     refreshOnline(null,1).then(r => {
-        console.log('Себя в список онлайна добавили')
+        console.log('Себя в список онлайна добавили', r)
     })
 }
 
 export function addFriendInfo(message) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         let parsedMessage;
         parse(message);
         anotherInfo.friends.push(parsedMessage);
         joinedTheChat(parsedMessage.nickname);
 
         refreshOnline(anotherInfo.friends).then((r) => {
-            resolve('Значение текущего онлайна обновлено;');
+            resolve(r, 'Значение текущего онлайна обновлено;');
         });
 
         function parse(mess) {
@@ -123,13 +123,13 @@ export function addFriendInfo(message) {
 
 function joinedTheChat(nickname) {
     const messageContainer = document.querySelector('#messageContainer');
-    const div = `<li class="member"><div class="member__join"><div>${nickname} присоединился к чату</div></div></li>`;
+    const div = `<li class="member join"><div class="member__join"><div>${nickname} присоединился к чату</div></div></li>`;
     messageContainer.insertAdjacentHTML('beforeend', div);
     messageContainer.scrollTop = messageContainer.scrollHeight;
 }
 
 async function refreshOnline(friends, number){
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const num = friends !== undefined && friends !== null ? friends.length : number;
         const onlineNumbers = document.querySelector('.chat__members');
         const text = ['участник', 'участника', 'участников'];

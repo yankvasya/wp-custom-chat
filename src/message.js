@@ -6,7 +6,8 @@ let personInfo = {
 const anotherInfo = {
     friends: [
 
-    ]
+    ],
+    online: 0
 };
 
 export function addMessage(message, id) {
@@ -54,13 +55,16 @@ export function addMessage(message, id) {
     } else {
         // Если сообщения вовсе отсутствуют или последнее было от МЕНЯ, то используется templateFull(с никнеймом и именем)
         // В ином случае используется html = обычный template
-        // const currentNickname = anotherInfo.forEach((el) => {
-        //     console.log(el)
-        // })
+        let whoSend;
+        anotherInfo.friends.forEach((el) => {
+            if (el.id === parsedMessage.id) {
+                return whoSend = el.nickname;
+            }
+        });
         html =
             lastElement === null || lastElement.classList.contains('me') || lastElement.classList.contains('join')
-                ? templateFull(Object.assign({nickname: 'Друг'}, parsedMessage, fullTime))
-                : template(Object.assign({nickname: 'Друг'}, parsedMessage, fullTime));
+                ? templateFull(Object.assign({nickname: whoSend}, parsedMessage, fullTime))
+                : template(Object.assign({nickname: whoSend}, parsedMessage, fullTime));
 
         // Если последнее сообщение было от меня или сообщения вовсе отсутствуют,, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
@@ -92,9 +96,10 @@ export function giveCookieId(id) {
     });
 }
 
+// При вводе ника обновляется число пользователей в чате
 export function giveNickname(nickname) {
     personInfo.nickname = nickname;
-    refreshOnline(null,1).then(r => {
+    refreshOnline(null,anotherInfo.online++).then(r => {
         console.log('Себя в список онлайна добавили', r)
     })
 }
@@ -121,6 +126,7 @@ export function addFriendInfo(message) {
     })
 }
 
+// Кто присоединился к чату
 function joinedTheChat(nickname) {
     const messageContainer = document.querySelector('#messageContainer');
     const div = `<li class="member join"><div class="member__join"><div>${nickname} присоединился к чату</div></div></li>`;

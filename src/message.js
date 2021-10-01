@@ -92,7 +92,7 @@ export function giveCookieId(id) {
                 clearInterval(checkNickName);
                 resolve(JSON.stringify(personInfo));
             }
-        }, 500);
+        }, 250);
     });
 }
 
@@ -115,6 +115,7 @@ export function addFriendInfo(message) {
             resolve(r, 'Значение текущего онлайна обновлено;');
         });
 
+        // Парсит
         function parse(mess) {
             parsedMessage = JSON.parse(mess);
             if (typeof parsedMessage !== 'object') {
@@ -126,22 +127,27 @@ export function addFriendInfo(message) {
     })
 }
 
-// Кто присоединился к чату
+// Кто присоединился к чату (отображение в чате)
 function joinedTheChat(nickname) {
     const messageContainer = document.querySelector('#messageContainer');
-    const div = `<li class="member join"><div class="member__join"><div>${nickname} присоединился к чату</div></div></li>`;
+    const div = `<li class="member join">
+                    <div class="member__join">
+                        <div>${nickname} присоединился к чату</div>
+                    </div>
+                </li>`;
     messageContainer.insertAdjacentHTML('beforeend', div);
     messageContainer.scrollTop = messageContainer.scrollHeight;
 }
 
+//
 async function refreshOnline(friends, number){
     return new Promise((resolve) => {
         const num = friends !== undefined && friends !== null ? friends.length : number;
         const onlineNumbers = document.querySelector('.chat__members');
-        const text = ['участник', 'участника', 'участников'];
 
-
+        // отвечает за склонение
         function variables(num) {
+            const text = ['участник', 'участника', 'участников'];
             if (num === 1 || num === 21) {
                 onlineNumbers.innerText = `${num} ${text[0]}`; // -К
                 resolve(text[0]);

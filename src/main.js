@@ -1,112 +1,48 @@
-require('./index.html')
+require('./index.html');
 
-import {giveNickname} from "./message";
+import {sendMessage} from "./websocket";
+import {auth} from "./validate";
 
-window.addEventListener('load', () => {
-    const login = document.querySelector('#login');
-    const loginInput = document.querySelector('#loginInput');
+const login = document.querySelector('#login');
+const loginInput = document.querySelector('#loginInput');
+const closeAside = document.querySelector('.aside__button');
+const sendButton = document.querySelector('#sendMessage');
+const messageText = document.querySelector('#messageText');
 
-    loginInput.addEventListener('input', () => {
-        const errorSpan = document.querySelector('.login__error');
-        errorSpan.classList.remove('visible');
-    })
+loginInput.addEventListener('input', () => {
+    const errorSpan = document.querySelector('.login__error');
+    errorSpan.classList.remove('visible');
+})
 
-    loginInput.addEventListener('keyup', (e) => {
-        if(e.key === 'Enter') {
-            auth(e);
-        }
-    });
-
-    login.addEventListener('click', (e) => {
-        auth(e);
-    });
-
-    const closeAside = document.querySelector('.aside__button');
-    closeAside.addEventListener('click', () => {
-        const aside = document.querySelector('.aside');
-        if(aside.classList.contains('hidden')) {
-            aside.classList.remove('hidden');
-        } else {
-            aside.classList.add('hidden');
-        }
-    });
+loginInput.addEventListener('keyup', (e) => {
+    e.key === 'Enter' ? auth(e) : false;
 });
 
-// Полный цикл авторизации
-function auth(e) {
-    e.preventDefault();
-    const errorSpan = document.querySelector('.login__error');
-    const login = document.querySelector('#login');
-    const nickname = login.previousElementSibling.children[0].value;
+login.addEventListener('click', (e) => {
+    auth(e);
+});
 
-    const nickIsValid = validateNickname(nickname);
-
-    if (nickIsValid === true) {
-        animateLoading(nickname)
-            .then((nickname) => {
-                // Когда загрузка пройдет, вернется resolve и запустится then
-                document.cookie = `nickname=${nickname}`;
-                const loginWindow = document.querySelector('.login');
-                const container = document.querySelector('.container');
-                loginWindow.classList.add('hide');
-                container.classList.remove('hide')
-                setTimeout(() => {
-                    loginWindow.classList.add('none');
-                    container.classList.add('visible');
-                }, 300);
-            });
-
-    } else {
-        errorSpan.innerHTML = `*- ${nickIsValid}`;
-        errorSpan.classList.add('visible');
+// Событие на кнопке ОТПРАВИТЬ
+sendButton.addEventListener('click', () => {
+    if (messageText.value.length > 0) {
+        sendMessage()
     }
-}
+});
 
-// Валидатный никнейм?
-function validateNickname(nickname) {
-   try {
-       let result = true;
+// При нажатии ENTER отправит сообщение
+messageText.addEventListener('keyup', (e) => {
+    if(e.key === 'Enter' && messageText.value.length > 0) {
+        sendMessage();
+    }
+});
 
-       if (nickname === '') {
-           new Error('Пустое поле!');
-       }
+// Шторка слева
+closeAside.addEventListener('click', () => {
+    const aside = document.querySelector('.aside');
+    if(aside.classList.contains('hidden')) {
+        aside.classList.remove('hidden');
+    } else {
+        aside.classList.add('hidden');
+    }
+});
 
-       if (!isNaN(Number([...nickname][0]))) {
-           new Error('Не должно начинаться с цифры!');
-       }
-
-       if (nickname.length < 5 ) {
-           new Error('Меньше 5 знаков!');
-       }
-
-       return result
-
-   } catch (e) {
-       return e.message
-   }
-}
-
-// Анимашка загрузки :)
-async function animateLoading(nickname) {
-    return new Promise((resolve ) => {
-        let tId;
-        let i = 0;
-        let position = 64; // start position
-        const interval = 10; //10 ms of interval for the setInterval()
-        const spinner = document.getElementById('loginLoading');
-        spinner.classList.remove('hide');
-
-        tId = setInterval(() => {
-            if (i === 100) {
-                spinner.classList.add('hide');
-                giveNickname(nickname);
-                resolve(nickname); // Возвращает никнейм
-                clearInterval(tId);
-            }
-            i++;
-
-            spinner.style.backgroundPositionX= `-${position}px`;
-            position < 1792 ? position += 64 : position = 64;
-        }, interval);
-    });
-}

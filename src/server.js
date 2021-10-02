@@ -22,7 +22,7 @@ webSocketServer.on('connection', function(ws) {
     ws.on('message', function(message) {
         let info;
         console.log(`Сообщение получено: '${message}' от пользователя с id ${id}`);
-        message.includes('nickname') ? info = message.toString() : info = {message: message.toString(), id: id}
+        info = {message: message.toString(), id: id}
 
         for(const key in clients) {
             clients[key].send(JSON.stringify(info));

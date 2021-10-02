@@ -4,17 +4,17 @@ let personInfo = {
 };
 
 let anotherInfo = {
-    friends: [
-
-    ],
+    friends: [],
+    allId: [],
     online: 0
 };
 
 export function addMessage(message, id) {
     const messageItem = document.createElement('li');
     const messageContainer = document.querySelector('#messageContainer');
-    // const parsedMessage = JSON.parse(message);
-    const parsedMessage = message;
+    const parsedMessage = {
+        message: message
+    };
     const currentTime = `${new Date().getHours() >= 10 ? new Date().getHours() : '0' + new Date().getHours()}:${new Date().getMinutes() >= 10 ? new Date().getMinutes() : '0' + new Date().getMinutes()}`;
     const currentFullDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDay()}T${currentTime}`;
     const fullTime = {
@@ -25,6 +25,7 @@ export function addMessage(message, id) {
     const lastElement = messageContainer.lastElementChild;
     const newCookie = `{"${document.cookie.split('; ').join('" "').split('=').join('":"').split(' ').join(', ')}"}`;
     const parsedCookie = JSON.parse(newCookie);
+    parsedCookie.id = Number(parsedCookie.id);
 
     const source = document.querySelector('#addMessageTemplate').innerHTML;
     const template = Handlebars.compile(source);
@@ -36,17 +37,21 @@ export function addMessage(message, id) {
 
     // Если привязанное ID к сообщению === моему ID, то оно от меня
     // В ином случае оно от друга
-    if (parsedMessage.id === id) {
+    if (parsedCookie.id=== id) {
         // Если сообщения вовсе отсутствуют или последнее было от друга, то используется templateFull(с никнеймом и именем)
         // В ином случае используется html = обычный template
         html =
-            lastElement === null || lastElement.classList.contains('friend') || lastElement.classList.contains('join')
+            lastElement === null
+            || lastElement.classList.contains('friend')
+            || lastElement.classList.contains('join')
                 ? templateFull(Object.assign(parsedCookie, parsedMessage, fullTime))
                 : template(Object.assign(parsedCookie, parsedMessage, fullTime));
 
         // Если последнее сообщение было от друга или сообщения вовсе отсутствуют, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
-        if (lastElement === null || lastElement.classList.contains('friend') || lastElement.classList.contains('join')) {
+        if (lastElement === null
+            || lastElement.classList.contains('friend')
+            || lastElement.classList.contains('join')) {
             messageItem.classList.add('me');
             messageContainer.appendChild(messageItem);
         } else {
@@ -57,18 +62,26 @@ export function addMessage(message, id) {
         // В ином случае используется html = обычный template
         let whoSend;
         anotherInfo.friends.forEach((el) => {
-            if (el.id === parsedMessage.id) {
+            if (el.id === id) {
                 return whoSend = el.nickname;
             }
         });
         html =
-            lastElement === null || lastElement.classList.contains('me') || lastElement.classList.contains('join') || lastElement.firstElementChild.textContent !== whoSend
+            lastElement === null
+            || lastElement.classList.contains('me')
+            || lastElement.classList.contains('join')
+            || lastElement.firstElementChild.textContent
+            !== whoSend
                 ? templateFull(Object.assign({nickname: whoSend}, parsedMessage, fullTime))
                 : template(Object.assign({nickname: whoSend}, parsedMessage, fullTime));
 
         // Если последнее сообщение было от меня или сообщения вовсе отсутствуют,, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
-        if (lastElement === null || lastElement.classList.contains('me') || lastElement.classList.contains('join') || lastElement.firstElementChild.textContent !== whoSend) {
+        if (lastElement === null
+            || lastElement.classList.contains('me')
+            || lastElement.classList.contains('join')
+            || lastElement.firstElementChild.textContent
+            !== whoSend) {
             messageItem.classList.add('friend');
             messageContainer.appendChild(messageItem);
         } else {
@@ -99,15 +112,14 @@ export function giveCookieId(id) {
 // При вводе ника обновляется число пользователей в чате
 export function giveNickname(nickname) {
        personInfo.nickname = nickname;
-       refreshOnline(null, ++anotherInfo.online).then(r => {
-       })
 }
 
-export function addFriendInfo(message) {
+export function addFriendInfo(nickname, id) {
     return new Promise((resolve) => {
-        anotherInfo.friends.push(message);
+        anotherInfo.friends.push({id: id, nickname: nickname});
+        anotherInfo.online++;
 
-        refreshOnline(anotherInfo.friends).then((r) => {
+        refreshOnline(anotherInfo).then((r) => {
             resolve(r, 'Значение текущего онлайна обновлено;');
         });
     })
@@ -132,13 +144,8 @@ export async function routeMessages(info, message, id) {
             await giveCookieId(id);
             break;
         case 'join':
-            console.log('join');
-            // await giveNickname(message.nickname);
-            await addFriendInfo(message.nickname)
-            joinedTheChat(message.nickname)
-            break;
-        case 'addfriend':
-            console.log('addfriend');
+            await addFriendInfo(message.message.nickname, message.id);
+            joinedTheChat(message.message.nickname);
             break;
         default:
             break;
@@ -158,9 +165,9 @@ function joinedTheChat(nickname) {
 }
 
 //
-async function refreshOnline(friends, number){
+async function refreshOnline(friends){
     return new Promise((resolve) => {
-        const num = friends !== undefined && friends !== null ? friends.length : number;
+        const num = friends.online;
         const onlineNumbers = document.querySelector('.chat__members');
 
         // отвечает за склонение
@@ -177,9 +184,9 @@ async function refreshOnline(friends, number){
                 return;
             }
             if (num > 10 || num < 20 || num >= 25 || num === 0) {
-                console.log(num)
                 onlineNumbers.innerText = `${num} ${text[2]}`; // -ОВ
                 resolve(text[2]);
+                return;
             }
         }
 

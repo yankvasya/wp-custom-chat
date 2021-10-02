@@ -1,84 +1,76 @@
 // Валидатный никнейм?
 import {giveNickname} from "./message";
+
 const container = document.querySelector('.container');
 
 // Полный цикл авторизации
 export function auth(e) {
-    e.preventDefault();
-    const errorSpan = document.querySelector('.login__error');
-    const login = document.querySelector('#login');
-    const nickname = login.previousElementSibling.children[0].value;
+    return new Promise((resolve) => {
+        e.preventDefault();
+        const errorSpan = document.querySelector('.login__error');
+        const login = document.querySelector('#login');
+        const nickname = login.previousElementSibling.children[0].value;
 
-    const nickIsValid = validateNickname(nickname);
+        const nickIsValid = validateNickname(nickname);
 
-    if (nickIsValid === true) {
-        animateLoading(nickname)
-            .then((nickname) => {
-                // Когда загрузка пройдет, вернется resolve и запустится then
-                document.cookie = `nickname=${nickname}`;
-                const loginWindow = document.querySelector('.login');
-                loginWindow.classList.add('hide');
-                container.classList.remove('hide')
-                setTimeout(() => {
-                    loginWindow.classList.add('none');
-                    container.classList.add('visible');
-                }, 300);
-            });
+        if (nickIsValid === true) {
+            animateLoading(nickname)
+                .then((nickname) => {
+                    // Когда загрузка пройдет, вернется resolve и запустится then
+                    giveNickname(nickname);
+                    const loginWindow = document.querySelector('.login');
+                    const data = {
+                        type: 'join',
+                        payload: {
+                            nickname: nickname
+                        }
+                    }
+                    document.cookie = `nickname=${nickname}`;
+                    loginWindow.classList.add('hide');
+                    container.classList.remove('hide');
+                    setTimeout(() => {
+                        loginWindow.classList.add('none');
+                        container.classList.add('visible');
+                    }, 300);
+                    resolve(JSON.stringify(data));
+                });
 
-    } else {
-        errorSpan.innerHTML = `*- ${nickIsValid}`;
-        errorSpan.classList.add('visible');
-    }
+        } else {
+            errorSpan.innerHTML = `*- ${nickIsValid}`;
+            errorSpan.classList.add('visible');
+        }
+    });
 }
 
 // Валидный ли никнейм?
 function validateNickname(nickname) {
-    try {
-        if (nickname === '') {
-            return new Error('Пустое поле!');
-        }
+    let isValide = true;
+    const specSymbols = ['[', ']', '{', '}', ',', '.', '=', '+', '$', '#', '"', '!', ';', ':', '<', '>', '?', `'`, '|', '*', '&', '№'];
 
-        if (!isNaN(Number([...nickname][0]))) {
-            return new Error('Никнейм не должен начинаться с цифры!');
-        }
+    nickname === '' ? isValide = 'Пустое поле!' : null;
+    !isNaN(Number([...nickname][0])) ? isValide = 'Никнейм не должен начинаться с цифры!' : null;
+    nickname.length < 5 ? isValide = 'Меньше 5 знаков!' : null;
+    specSymbols.forEach((symbol) => nickname.includes(symbol) ? isValide = 'Содержит недопустимый(-ые) символ(-ы)': null);
 
-        if (nickname.length < 5 ) {
-            return new Error('Меньше 5 знаков!');
-        }
-
-        const specSymbols = ['[', ']', '{', '}', ',', '.', '=', '+', '$', '#', '"', '!', ';', ':', '<', '>', '?', `'`, '|', '*', '&', '№'];
-
-        let spec = true;
-        for (const symbol of specSymbols) {
-            if (nickname.includes(symbol)) {
-                spec = false;
-            }
-        }
-
-        if (!spec) {
-            return new Error('Содержит недопустимый(-ые) символ(-ы)');
-        }
-
-        return true;
-    } catch (e) {
-        return e.message;
-    }
+    return isValide;
 }
 
 // Анимашка загрузки, позже сюда стоит засунуть разного рода проверки
 async function animateLoading(nickname) {
     return new Promise((resolve ) => {
-        let tId;
-        let i = 0;
-        let position = 64; // start position
-        const interval = 10; //10 ms of interval for the setInterval()
         const spinner = document.getElementById('loginLoading');
-        spinner.classList.remove('hide');
+        let {position, interval, i} = {
+            position: 64,
+            interval: 10,
+            i: 0
+        }
+        let tId;
 
+        spinner.classList.remove('hide');
         tId = setInterval(() => {
             if (i === 100) {
                 spinner.classList.add('hide');
-                giveNickname(nickname);
+                // routeMessages('nickname',nickname);
                 resolve(nickname); // Возвращает никнейм
                 clearInterval(tId);
             }

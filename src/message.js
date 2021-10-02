@@ -13,8 +13,8 @@ let anotherInfo = {
 export function addMessage(message, id) {
     const messageItem = document.createElement('li');
     const messageContainer = document.querySelector('#messageContainer');
-    const parsedMessage = JSON.parse(message);
-
+    // const parsedMessage = JSON.parse(message);
+    const parsedMessage = message;
     const currentTime = `${new Date().getHours() >= 10 ? new Date().getHours() : '0' + new Date().getHours()}:${new Date().getMinutes() >= 10 ? new Date().getMinutes() : '0' + new Date().getMinutes()}`;
     const currentFullDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDay()}T${currentTime}`;
     const fullTime = {
@@ -98,33 +98,51 @@ export function giveCookieId(id) {
 
 // При вводе ника обновляется число пользователей в чате
 export function giveNickname(nickname) {
-    personInfo.nickname = nickname;
-    refreshOnline(null, ++anotherInfo.online).then(r => {
-        console.log('Себя в список онлайна добавил |', r)
-    })
+       personInfo.nickname = nickname;
+       refreshOnline(null, ++anotherInfo.online).then(r => {
+       })
 }
 
 export function addFriendInfo(message) {
     return new Promise((resolve) => {
-        let parsedMessage;
-        parse(message);
-        anotherInfo.friends.push(parsedMessage);
-        joinedTheChat(parsedMessage.nickname);
+        anotherInfo.friends.push(message);
 
         refreshOnline(anotherInfo.friends).then((r) => {
             resolve(r, 'Значение текущего онлайна обновлено;');
         });
-
-        // Парсит
-        function parse(mess) {
-            parsedMessage = JSON.parse(mess);
-            if (typeof parsedMessage !== 'object') {
-                parse(parsedMessage);
-            } else {
-                return parsedMessage;
-            }
-        }
     })
+}
+
+export function removeFriendInfo(message) {
+
+}
+
+// route
+export async function routeMessages(info, message, id) {
+    switch (info) {
+        case 'addmessage':
+            console.log('addmessage');
+            await addMessage(message.message, message.id);
+            break;
+        case 'removefriend':
+            console.log('removefriend');
+            await removeFriendInfo(message.message);
+            break;
+        case 'connection':
+            await giveCookieId(id);
+            break;
+        case 'join':
+            console.log('join');
+            // await giveNickname(message.nickname);
+            await addFriendInfo(message.nickname)
+            joinedTheChat(message.nickname)
+            break;
+        case 'addfriend':
+            console.log('addfriend');
+            break;
+        default:
+            break;
+    }
 }
 
 // Кто присоединился к чату (отображение в чате)

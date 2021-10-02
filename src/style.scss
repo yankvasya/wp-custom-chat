@@ -51,17 +51,17 @@ h1 {
 
   width: 452px;
   height: 497px;
-  transition: opacity 0.3s;
 
+  transition: opacity 0.3s;
   background-image: linear-gradient(to top right, rgb(19, 25, 128), rgb(22, 25, 124), rgb(25, 25, 120), rgb(27, 24, 116), rgb(30, 24, 112), rgb(33, 24, 108), rgb(36, 24, 104), rgb(39, 24, 100), rgb(42, 24, 96), rgb(44, 23, 92), rgb(47, 23, 88), rgb(50, 23, 84));
 
   &.hide {
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.9s;
+  }
 
-    &.none {
-      display: none;
-    }
+  &.none {
+    display: none;
   }
 
   &__img {

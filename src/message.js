@@ -118,56 +118,64 @@ export function addFriendInfo(nickname, id) {
     return new Promise((resolve) => {
         anotherInfo.friends.push({id: id, nickname: nickname});
         anotherInfo.online++;
-
-        refreshOnline(anotherInfo).then((r) => {
-            resolve(r, 'Значение текущего онлайна обновлено;');
-        });
+        eventOnTheChat(nickname, 'присоединился к чату');
+        refreshOnline();
     })
 }
 
-export function removeFriendInfo(message) {
+// Покинул чат? Покинул список друзей)
+export function removeFriendInfo(id) {
+    const friends = anotherInfo.friends;
+    anotherInfo.online--;
 
-}
+    console.log(anotherInfo)
 
-// route
-export async function routeMessages(info, message, id) {
-    switch (info) {
-        case 'addmessage':
-            console.log('addmessage');
-            await addMessage(message.message, message.id);
-            break;
-        case 'removefriend':
-            console.log('removefriend');
-            await removeFriendInfo(message.message);
-            break;
-        case 'connection':
-            await giveCookieId(id);
-            break;
-        case 'join':
-            await addFriendInfo(message.message.nickname, message.id);
-            joinedTheChat(message.message.nickname);
-            break;
-        default:
-            break;
+    for (let i = 0; i < friends.length; i++) {
+        if (friends[i].id === id) {
+            refreshOnline();
+            eventOnTheChat(friends[i].nickname, 'вышел из чата');
+            delete anotherInfo.friends[i];
+        }
     }
+
+    console.log(anotherInfo)
 }
 
-// Кто присоединился к чату (отображение в чате)
-function joinedTheChat(nickname) {
+// оповещения, кто присоединился, а кто вышел
+function eventOnTheChat(nickname, event) {
     const messageContainer = document.querySelector('#messageContainer');
     const div = `<li class="member join">
                     <div class="member__join">
-                        <div>${nickname} присоединился к чату</div>
+                        <div>${nickname} ${event}</div>
                     </div>
                 </li>`;
     messageContainer.insertAdjacentHTML('beforeend', div);
     messageContainer.scrollTop = messageContainer.scrollHeight;
 }
 
+// route
+export async function routeMessages(info, message, id) {
+    switch (info) {
+        case 'addmessage':
+            await addMessage(message.message, message.id);
+            break;
+        case 'close':
+            await removeFriendInfo(message.id);
+            break;
+        case 'connection':
+            await giveCookieId(id);
+            break;
+        case 'join':
+            await addFriendInfo(message.message.nickname, message.id);
+            break;
+        default:
+            break;
+    }
+}
+
 //
-async function refreshOnline(friends){
-    return new Promise((resolve) => {
-        const num = friends.online;
+function refreshOnline(){
+        const num = anotherInfo.online;
         const onlineNumbers = document.querySelector('.chat__members');
 
         // отвечает за склонение
@@ -175,21 +183,16 @@ async function refreshOnline(friends){
             const text = ['участник', 'участника', 'участников'];
             if (num === 1 || num === 21) {
                 onlineNumbers.innerText = `${num} ${text[0]}`; // -К
-                resolve(text[0]);
                 return;
             }
             if (num > 1 || num < 5 || 21 < num < 25) {
                 onlineNumbers.innerText = `${num} ${text[1]}`; // -А
-                resolve(text[1]);
                 return;
             }
             if (num > 10 || num < 20 || num >= 25 || num === 0) {
                 onlineNumbers.innerText = `${num} ${text[2]}`; // -ОВ
-                resolve(text[2]);
-                return;
             }
         }
 
         variables(num);
-    })
 }

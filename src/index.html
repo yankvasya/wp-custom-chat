@@ -13,7 +13,7 @@
 <body>
     <div class="wrapper">
         <div class="container hide">
-<!--            hide-->
+<!--            hide, visible-->
             <aside class="aside hidden">
                 <ul class="aside__button">
                     <li class="button__element"></li>
@@ -37,23 +37,50 @@
 <!--                        </div>-->
 <!--                    </li>-->
 <!--                    <li class="member friend">-->
-<!--                        <h4 class="member__nickname">Boroda23</h4>-->
+<!--                        <h4 class="member__nickname">Енотик</h4>-->
 <!--                        <div class="member__message message">-->
 <!--                            <div class="message__text">Привет</div>-->
 <!--                            <time class="message__time" datetime="2020-09-30T21:30">21:30</time>-->
 <!--                        </div>-->
-<!--                        <div class="member__message">Как дела?</div>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">Как дела?</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:30">21:30</time>-->
+<!--                        </div>-->
 <!--                    </li>-->
 <!--                    <li class="member me">-->
+<!--                        <img class="member__img" src="https://i.ibb.co/znS6VSk/pngwing-com.png" alt="avatar">-->
 <!--                        <h4 class="member__nickname">Nik</h4>-->
-<!--                        <div class="member__message">Привет!</div>-->
-<!--                        <div class="member__message">Хорошо</div>-->
-<!--                        <div class="member__message">Как у тебя дела?</div>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">Привет!</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:31">21:31</time>-->
+<!--                        </div>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">Хорошо</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:31">21:31</time>-->
+<!--                        </div>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">А у тебя как?</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:31">21:31</time>-->
+<!--                        </div>-->
 <!--                    </li>-->
 <!--                    <li class="member friend">-->
-<!--                        <h4 class="member__nickname">Boroda23</h4>-->
-<!--                        <div class="member__message">У меня тоже все хорошо</div>-->
-<!--                        <div class="member__message">Рад был пообщаться</div>-->
+<!--                        <img class="member__img" src="https://i.ibb.co/znS6VSk/pngwing-com.png" alt="avatar">-->
+<!--                        <h4 class="member__nickname">Енотик</h4>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">У меня тоже все хорошо</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:32">21:32</time>-->
+<!--                        </div>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">Рад был пообщаться</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:32">21:32</time>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="member join">-->
+<!--                        <div class="member__join">-->
+<!--                            <div>-->
+<!--                                Енотик вышел из чата-->
+<!--                            </div>-->
+<!--                        </div>-->
 <!--                    </li>-->
                 </ul>
                 <div class="messaging">
@@ -76,6 +103,7 @@
     </div>
 
     <script type="text" id="addFullMessageTemplate">
+        <img class="member__img" src={{imageSrc}}>
         <h4 class="member__nickname">{{nickname}}</h4>
         <div class="member__message message">
         <div class="message__text">{{message}}</div>

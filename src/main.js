@@ -23,7 +23,7 @@ loginInput.addEventListener('input', () => {
 
 // при нажатии ENTER вызывает auth(e)
 loginInput.addEventListener('keyup', (e) => {
-    e.key === 'Enter' ? auth(e).then((r) => sendInfo(r)) : false;
+    e.key === 'Enter' && !login.disabled ? auth(e).then((r) => sendInfo(r)) : false;
 });
 
 login.addEventListener('click', (e) => {

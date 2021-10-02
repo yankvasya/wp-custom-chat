@@ -14,6 +14,8 @@ export function auth(e) {
         const nickIsValid = validateNickname(nickname);
 
         if (nickIsValid === true) {
+            const login = document.querySelector('#login');
+            login.disabled = true;
             animateLoading(nickname)
                 .then((nickname) => {
                     // Когда загрузка пройдет, вернется resolve и запустится then

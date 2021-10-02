@@ -12,9 +12,16 @@ let anotherInfo = {
 export function addMessage(message, id) {
     const messageItem = document.createElement('li');
     const messageContainer = document.querySelector('#messageContainer');
+    let imageSrc = {
+        imageSrc: 'https://i.ibb.co/znS6VSk/pngwing-com.png'
+    };
     const parsedMessage = {
         message: message
     };
+    // parsedMessage.message.imageSrc ? imageSrc = parsedMessage.message.imageSrc : 'https://i.ibb.co/znS6VSk/pngwing-com.png';
+
+
+    console.log()
     const currentTime = `${new Date().getHours() >= 10 ? new Date().getHours() : '0' + new Date().getHours()}:${new Date().getMinutes() >= 10 ? new Date().getMinutes() : '0' + new Date().getMinutes()}`;
     const currentFullDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDay()}T${currentTime}`;
     const fullTime = {
@@ -44,7 +51,7 @@ export function addMessage(message, id) {
             lastElement === null
             || lastElement.classList.contains('friend')
             || lastElement.classList.contains('join')
-                ? templateFull(Object.assign(parsedCookie, parsedMessage, fullTime))
+                ? templateFull(Object.assign(parsedCookie, parsedMessage, fullTime, imageSrc))
                 : template(Object.assign(parsedCookie, parsedMessage, fullTime));
 
         // Если последнее сообщение было от друга или сообщения вовсе отсутствуют, то создай li и закинь его в ul
@@ -72,7 +79,7 @@ export function addMessage(message, id) {
             || lastElement.classList.contains('join')
             || lastElement.firstElementChild.textContent
             !== whoSend
-                ? templateFull(Object.assign({nickname: whoSend}, parsedMessage, fullTime))
+                ? templateFull(Object.assign({nickname: whoSend}, parsedMessage, fullTime, imageSrc))
                 : template(Object.assign({nickname: whoSend}, parsedMessage, fullTime));
 
         // Если последнее сообщение было от меня или сообщения вовсе отсутствуют,, то создай li и закинь его в ul

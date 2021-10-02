@@ -5,7 +5,6 @@ let personInfo = {
 
 let anotherInfo = {
     friends: [],
-    allId: [],
     online: 0
 };
 
@@ -122,30 +121,46 @@ export function giveNickname(nickname) {
 }
 
 export function addFriendInfo(nickname, id) {
-    return new Promise((resolve) => {
+    return new Promise(() => {
         anotherInfo.friends.push({id: id, nickname: nickname});
         anotherInfo.online++;
-        eventOnTheChat(nickname, 'присоединился к чату');
         refreshOnline();
+        eventOnTheChat(nickname, 'присоединился к чату');
+        asideOnline(nickname, 'join');
     })
+}
+
+function asideOnline(nickname, event) {
+    if (event === 'join') {
+        personInfo.nickname !== nickname ?
+            document.querySelector('.profile__nicknames')
+                .insertAdjacentHTML('beforeend', `<li class="nickname">${nickname}</li>`) :
+            null;
+    } else if (event === 'leave') {
+        if (personInfo.nickname !== nickname) {
+            const friends = document.querySelector('.profile__nicknames').children;
+
+            for (let i = 0; i < friends.length; i++) {
+                if(friends[i].innerText === `${nickname}`) {
+                    friends[i].remove();
+                }
+            }
+        }
+    }
 }
 
 // Покинул чат? Покинул список друзей)
 export function removeFriendInfo(id) {
-    const friends = anotherInfo.friends;
-    anotherInfo.online--;
-
-    console.log(anotherInfo)
-
-    for (let i = 0; i < friends.length; i++) {
-        if (friends[i].id === id) {
-            refreshOnline();
-            eventOnTheChat(friends[i].nickname, 'вышел из чата');
-            delete anotherInfo.friends[i];
+        const friends = anotherInfo.friends;
+        for (let i = 0; i < friends.length; i++) {
+            if (friends[i].id === id) {
+                anotherInfo.online--;
+                refreshOnline();
+                eventOnTheChat(friends[i].nickname, 'вышел из чата');
+                asideOnline(friends[i].nickname, 'leave');
+                anotherInfo.friends[i] = {}
+            }
         }
-    }
-
-    console.log(anotherInfo)
 }
 
 // оповещения, кто присоединился, а кто вышел
@@ -180,7 +195,7 @@ export async function routeMessages(info, message, id) {
     }
 }
 
-//
+// отвечает за счетчик онлайна
 function refreshOnline(){
         const num = anotherInfo.online;
         const onlineNumbers = document.querySelector('.chat__members');
@@ -188,6 +203,9 @@ function refreshOnline(){
         // отвечает за склонение
         function variables(num) {
             const text = ['участник', 'участника', 'участников'];
+            if (num < 0) {
+                return;
+            }
             if (num === 1 || num === 21) {
                 onlineNumbers.innerText = `${num} ${text[0]}`; // -К
                 return;

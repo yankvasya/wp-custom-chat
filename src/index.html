@@ -12,20 +12,39 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="container hide">
+        <div class="container visible">
 <!--            hide, visible-->
-            <aside class="aside hidden">
+<!--            hidden-->
+            <aside class="aside">
                 <ul class="aside__button">
                     <li class="button__element"></li>
                     <li class="button__element"></li>
                     <li class="button__element"></li>
                 </ul>
+                <div class="aside__profile">
+                    <div class="profile">
+                        <a href="#" class="profile__img"><img src="https://i.ibb.co/Q9kKHgk/150-150.jpg" alt="avatar"></a>
+                        <div class="profile__nickname">Vasily</div>
+                    </div>
+                    <ul class="profile__nicknames">
+                        Список друзей:
+<!--                        <li class="nickname">Стас1</li>-->
+<!--                        <li class="nickname">Стас2</li>-->
+<!--                        <li class="nickname">Стас3</li>-->
+<!--                        <li class="nickname">Стас4</li>-->
+<!--                        <li class="nickname">Стас5</li>-->
+<!--                        <li class="nickname">Стас6</li>-->
+<!--                        <li class="nickname">Стас7</li>-->
+<!--                        <li class="nickname">Стас8</li>-->
+                    </ul>
+                </div>
+
             </aside>
 
             <div class="chat">
                 <div class="chat__header">
                     <h3 class="chat__title">Чат</h3>
-                    <div class="chat__members">0 участников</div>
+                    <a href="#" id="allMembers" class="chat__members">0 участников</a>
                 </div>
                 <ul id="messageContainer" class="chat__all-messages">
 <!--                    Добавляй элементы сюда-->

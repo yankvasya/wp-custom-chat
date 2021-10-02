@@ -9,6 +9,7 @@ const closeAside = document.querySelector('.aside__button');
 const sendButton = document.querySelector('#sendMessage');
 const messageText = document.querySelector('#messageText');
 const loginWindow = document.querySelector('.login');
+const allMembers = document.querySelector('#allMembers');
 
 window.addEventListener('load', () => {
     loginWindow.classList.remove('hide');
@@ -46,3 +47,8 @@ closeAside.addEventListener('click', () => {
     aside.classList.contains('hidden') ? aside.classList.remove('hidden') : aside.classList.add('hidden');
 });
 
+// кол-во участников
+allMembers.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('clicked')
+});

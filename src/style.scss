@@ -181,7 +181,7 @@ h1 {
   display: flex;
   flex-direction: column;
   width: 32%;
-  min-width: 77px;
+  min-width: 360px;
   background: #17212B;
   transition: width 0.5s cubic-bezier(.7,-0.36,.26,1.37);
 
@@ -218,6 +218,54 @@ h1 {
       }
     }
   }
+
+  &__profile {
+    display: flex;
+    flex-direction: column;
+    margin: 75px 0 0 100px;
+
+    .profile {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      user-select: none;
+
+      &__img {
+
+        img {
+          height: 80px;
+          width: 80px;
+          border-radius: 50%;
+          user-select: none;
+        }
+      }
+
+      &__nickname {
+        margin-left: 10px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 16px;
+        color: #5387C1;
+      }
+
+      &__nicknames {
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 16px;
+        color: #7F91A4;
+        text-shadow: 0 3px 17px rgba(45, 255, 190, 0.49);
+
+        .nickname {
+          margin: 10px 0 0 10px;
+        }
+      }
+    }
+  }
 }
 
 .chat {
@@ -248,12 +296,33 @@ h1 {
   }
 
   &__members {
+    position: relative;
+    text-decoration: none;
     margin-top: 4px;
     font-style: normal;
     font-weight: 300;
     font-size: 12px;
     line-height: 14px;
     color: #7F91A4;
+
+    transition: color 2s;
+
+    &:hover {
+      color: #cfd7e1;
+      text-decoration: underline;
+
+      transition: color 2s;
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 30px;
+        left: -5px;
+        min-width: 90px;
+        min-height: 100px;
+        background-color: rgba(8, 28, 51, 0.25);
+      }
+    }
   }
 
   &__all-messages {

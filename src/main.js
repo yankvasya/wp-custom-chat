@@ -1,3 +1,5 @@
+import {routeMessages} from "./message";
+
 require('./index.html');
 
 import {sendInfo, sendMessage} from "./websocket";
@@ -78,14 +80,24 @@ imgSet.addEventListener('click', (e) => {
     fileCategoryOpened = true;
 });
 
-imgSet.addEventListener('change', (e) => {
-    console.log(e)
-   // e.preventDefault();
+const testDiv = document.querySelector('.profile__picture');
+
+document.addEventListener('DOMContentLoaded', () => {
+    const recentImageDataUrl = sessionStorage.getItem('recent-image');
+
+    if (recentImageDataUrl) {
+        testDiv.setAttribute('src', recentImageDataUrl);
+        testDiv.src = `${recentImageDataUrl}`;
+    }
+
+    // при получение файла, меняет аватар
+    imgSet.addEventListener('change', function (e) {
+        routeMessages('newAvatar', this).then();
+    });
 });
 
 // отвечает за закрытие модельки загрузки аватарки
 function imgCloseFunc() {
-    console.log(123)
     imgWindow.classList.add('hidden');
     setTimeout(() => {
         imgWindow.classList.add('none');
@@ -97,3 +109,4 @@ document.addEventListener('keyup', (e) => {
     e.key === 'Escape' && !imgWindow.classList.contains('hidden') && !fileCategoryOpened ? imgCloseFunc() : null;
     fileCategoryOpened = false;
 });
+

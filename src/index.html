@@ -12,10 +12,10 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="container visible">
+        <div class="container hide">
 <!--            hide, visible-->
 <!--            hidden-->
-            <aside class="aside">
+            <aside class="aside hidden">
                 <ul class="aside__button">
                     <li class="button__element"></li>
                     <li class="button__element"></li>
@@ -23,7 +23,9 @@
                 </ul>
                 <div class="aside__profile">
                     <div class="profile">
-                        <a href="#" class="profile__img"><img src="https://i.ibb.co/Q9kKHgk/150-150.jpg" alt="avatar"></a>
+                        <a href="#" class="profile__img">
+                            <img class="profile__picture" src="https://i.ibb.co/Q9kKHgk/150-150.jpg" alt="avatar">
+                        </a>
                         <div class="profile__nickname"></div>
                     </div>
                     <ul class="profile__nicknames">
@@ -101,7 +103,7 @@
         </div>
 
 <!--        hide, none-->
-        <div class="login hide none">
+        <div class="login">
             <img class="login__img" src="https://i.ibb.co/FxBFRxc/Group-1.png" alt="login img">
             <h2 class="login__title">Авторизация</h2>
             <p class="login__text">Введите пожалуйста свой ник для дальнейшей авторизации</p>
@@ -112,7 +114,8 @@
         </div>
     </div>
 
-    <div class="img">
+<!--    hidden, none-->
+    <div class="img hidden none">
         <a href="#" class="img__close"></a>
         <h4 class="img__title">Загрузка фото</h4>
         <form class="img__content">

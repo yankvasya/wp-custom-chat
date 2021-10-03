@@ -2,7 +2,9 @@ import {getDataBaseInfo, sendDataBaseInfo} from "./websocket";
 
 let personInfo = {
     id: 0,
-    nickname: ''
+    nickname: '',
+    avatar: 'https://i.ibb.co/znS6VSk/pngwing-com.png',
+    // avatar: document.querySelector('.profile__picture').src
 };
 
 let anotherInfo = {
@@ -14,15 +16,15 @@ export function addMessage(message, id) {
     const messageItem = document.createElement('li');
     const messageContainer = document.querySelector('#messageContainer');
     let imageSrc = {
-        imageSrc: 'https://i.ibb.co/znS6VSk/pngwing-com.png'
+        imageSrc: personInfo.avatar
     };
+    const another = {
+        imageSrc: 'https://i.ibb.co/znS6VSk/pngwing-com.png'
+    }
     const parsedMessage = {
         message: message
     };
-    // parsedMessage.message.imageSrc ? imageSrc = parsedMessage.message.imageSrc : 'https://i.ibb.co/znS6VSk/pngwing-com.png';
 
-
-    console.log()
     const currentTime = `${new Date().getHours() >= 10 ? new Date().getHours() : '0' + new Date().getHours()}:${new Date().getMinutes() >= 10 ? new Date().getMinutes() : '0' + new Date().getMinutes()}`;
     const currentFullDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDay()}T${currentTime}`;
     const fullTime = {
@@ -80,7 +82,7 @@ export function addMessage(message, id) {
             || lastElement.classList.contains('join')
             || lastElement.firstElementChild.textContent
             !== whoSend
-                ? templateFull(Object.assign({nickname: whoSend}, parsedMessage, fullTime, imageSrc))
+                ? templateFull(Object.assign({nickname: whoSend}, parsedMessage, fullTime, another))
                 : template(Object.assign({nickname: whoSend}, parsedMessage, fullTime));
 
         // Если последнее сообщение было от меня или сообщения вовсе отсутствуют,, то создай li и закинь его в ul
@@ -121,6 +123,14 @@ export function giveCookieId(id) {
 export function giveNickname(nickname) {
        personInfo.nickname = nickname;
        document.querySelector('.profile__nickname').innerText = `${nickname}`;
+}
+
+// Забрать из localstorage аватар
+function giveAvatar() {
+    if (localStorage.getItem('recent-image')) {
+        personInfo.avatar = sessionStorage.getItem('recent-image');
+        // personInfo.avatar = document.querySelector('.profile__picture').src;
+    }
 }
 
 export function addFriendInfo(nickname, id) {
@@ -190,6 +200,7 @@ export async function routeMessages(info, message, id) {
             break;
         case 'connection':
             getDataBaseInfo();
+            giveAvatar();
             await giveCookieId(id);
             break;
         case 'join':
@@ -200,6 +211,9 @@ export async function routeMessages(info, message, id) {
             break;
         case 'takeDataBaseInfo':
             message.message.id === personInfo.id && anotherInfo.friends.length === 0 ? pushDataBaseInfo(message.message) : null;
+            break;
+        case 'newAvatar':
+            await newAvatar(message);
             break;
         default:
             break;
@@ -237,8 +251,28 @@ function refreshOnline(){
 function pushDataBaseInfo(data) {
     anotherInfo.friends = data.friends;
     anotherInfo.online = data.online;
-    refreshOnline()
-        for (const friend of anotherInfo.friends) {
-            friend.nickname !==undefined ? asideOnline(friend.nickname, 'join') : null;
-        }
+    refreshOnline();
+    for (const friend of anotherInfo.friends) {
+        friend.nickname !==undefined ? asideOnline(friend.nickname, 'join') : null;
+    }
+}
+
+// при изменении аватара происходит это
+function newAvatar(that) {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+        sessionStorage.setItem('recent-image', reader.result);
+        personInfo.avatar = reader.result;
+
+        const testDiv = document.querySelector('.profile__picture');
+
+        const newRecentImageDataUrl = sessionStorage.getItem('recent-image');
+        testDiv.style.display = 'none';
+        testDiv.src = `${newRecentImageDataUrl}`;
+        testDiv.style.display = 'block';
+
+    });
+    reader.readAsDataURL(that.files[0]);
+
 }

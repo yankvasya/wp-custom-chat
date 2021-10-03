@@ -12,10 +12,10 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="container hide">
+        <div class="container visible">
 <!--            hide, visible-->
 <!--            hidden-->
-            <aside class="aside hidden">
+            <aside class="aside">
                 <ul class="aside__button">
                     <li class="button__element"></li>
                     <li class="button__element"></li>
@@ -30,7 +30,6 @@
                         Онлайн:
                     </ul>
                 </div>
-
             </aside>
 
             <div class="chat">
@@ -111,6 +110,18 @@
             <span class="login__error"></span>
             <div id="loginLoading" class="login__loading hide"></div>
         </div>
+    </div>
+
+    <div class="img">
+        <a href="#" class="img__close"></a>
+        <h4 class="img__title">Загрузка фото</h4>
+        <form class="img__content">
+            <label for="imageUpload">
+                <img src="https://i.ibb.co/0m3MXtN/Vector.png" alt="no photo" class="img__img">
+            <input id="imageUpload" accept=".jpg, .jpeg, .png" type="file" name="avatar" class="img__link">
+            </label>
+            <h3 class="img__nickname">Nickname</h3>
+        </form>
     </div>
 
     <script type="text" id="addFullMessageTemplate">

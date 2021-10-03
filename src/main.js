@@ -10,10 +10,14 @@ const sendButton = document.querySelector('#sendMessage');
 const messageText = document.querySelector('#messageText');
 const loginWindow = document.querySelector('.login');
 const allMembers = document.querySelector('#allMembers');
+const imgOpen = document.querySelector('.profile__img');
+const imgClose = document.querySelector('.img__close');
+const imgWindow = document.querySelector('.img');
+const imgSet = document.querySelector('.img__link');
 
-window.addEventListener('load', () => {
-    loginWindow.classList.remove('hide');
-    loginWindow.classList.remove('none');
+window.addEventListener('load', (e) => {
+    // loginWindow.classList.remove('hide');
+    // loginWindow.classList.remove('none');
 });
 
 // убирает поле с ошибкой
@@ -51,4 +55,45 @@ closeAside.addEventListener('click', () => {
 allMembers.addEventListener('click', (e) => {
     e.preventDefault();
     console.log('clicked')
+});
+
+// Открыть модельку с загрузкой изображения
+imgOpen.addEventListener('click', (e) => {
+    e.preventDefault()
+    imgWindow.classList.remove('none');
+    setTimeout(()=> {
+        imgWindow.classList.remove('hidden')
+    }, 100);
+});
+
+// Закрытие модельки с загрузкой изображения
+imgClose.addEventListener('click', (e) => {
+   e.preventDefault();
+    imgCloseFunc()
+});
+
+let fileCategoryOpened = false;
+
+imgSet.addEventListener('click', (e) => {
+    fileCategoryOpened = true;
+});
+
+imgSet.addEventListener('change', (e) => {
+    console.log(e)
+   // e.preventDefault();
+});
+
+// отвечает за закрытие модельки загрузки аватарки
+function imgCloseFunc() {
+    console.log(123)
+    imgWindow.classList.add('hidden');
+    setTimeout(() => {
+        imgWindow.classList.add('none');
+    }, 500)
+}
+
+// Если открыта менюшка с выбором аватарки, то нажатие Escape закроет это меню
+document.addEventListener('keyup', (e) => {
+    e.key === 'Escape' && !imgWindow.classList.contains('hidden') && !fileCategoryOpened ? imgCloseFunc() : null;
+    fileCategoryOpened = false;
 });

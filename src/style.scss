@@ -51,6 +51,7 @@ h1 {
 
   width: 452px;
   height: 497px;
+  min-height: 300px;
 
   transition: opacity 0.3s;
   background-image: linear-gradient(to top right, rgb(19, 25, 128), rgb(22, 25, 124), rgb(25, 25, 120), rgb(27, 24, 116), rgb(30, 24, 112), rgb(33, 24, 108), rgb(36, 24, 104), rgb(39, 24, 100), rgb(42, 24, 96), rgb(44, 23, 92), rgb(47, 23, 88), rgb(50, 23, 84));
@@ -180,12 +181,14 @@ h1 {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 32%;
-  min-width: 360px;
+  width: 360px;
+  //min-width: 360px;
   background: #17212B;
   transition: width 0.5s cubic-bezier(.7,-0.36,.26,1.37);
+  user-select: none;
 
   &.hidden {
+    min-width: 77px;
     width: 4%;
     transition: width 0.5s cubic-bezier(.7,-0.36,.26,1.37);
   }
@@ -230,6 +233,7 @@ h1 {
       align-items: center;
       user-select: none;
 
+
       &__img {
 
         img {
@@ -259,8 +263,17 @@ h1 {
         line-height: 16px;
         color: #7F91A4;
         text-shadow: 0 3px 17px rgba(45, 255, 190, 0.49);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 260px;
+
 
         .nickname {
+          width: 200px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           margin: 10px 0 0 10px;
         }
       }
@@ -277,6 +290,7 @@ h1 {
 
 
   &__header {
+    user-select: none;
     height: $heightHeader;
     padding: 13px 16px 9px;
     display: flex;
@@ -336,6 +350,7 @@ h1 {
     position: relative;
     flex-direction: column;
     margin-top: 9px;
+    user-select: none;
 
     &__join {
       display: flex;

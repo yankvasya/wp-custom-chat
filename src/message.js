@@ -1,3 +1,5 @@
+import {getDataBaseInfo, sendDataBaseInfo} from "./websocket";
+
 let personInfo = {
     id: 0,
     nickname: ''
@@ -118,6 +120,7 @@ export function giveCookieId(id) {
 // При вводе ника обновляется число пользователей в чате
 export function giveNickname(nickname) {
        personInfo.nickname = nickname;
+       document.querySelector('.profile__nickname').innerText = `${nickname}`;
 }
 
 export function addFriendInfo(nickname, id) {
@@ -143,6 +146,7 @@ function asideOnline(nickname, event) {
             for (let i = 0; i < friends.length; i++) {
                 if(friends[i].innerText === `${nickname}`) {
                     friends[i].remove();
+                    // friends = friends.slice[0, i] + friends.slice(i+1)
                 }
             }
         }
@@ -185,10 +189,17 @@ export async function routeMessages(info, message, id) {
             await removeFriendInfo(message.id);
             break;
         case 'connection':
+            getDataBaseInfo();
             await giveCookieId(id);
             break;
         case 'join':
             await addFriendInfo(message.message.nickname, message.id);
+            break;
+        case 'dataBaseInfo':
+            message.id !== personInfo.id ? sendDataBaseInfo(anotherInfo, message.id) : null;
+            break;
+        case 'takeDataBaseInfo':
+            message.message.id === personInfo.id && anotherInfo.friends.length === 0 ? pushDataBaseInfo(message.message) : null;
             break;
         default:
             break;
@@ -220,4 +231,14 @@ function refreshOnline(){
         }
 
         variables(num);
+}
+
+// данные пушит в anotherInfo (данные по чату, онлайн)
+function pushDataBaseInfo(data) {
+    anotherInfo.friends = data.friends;
+    anotherInfo.online = data.online;
+    refreshOnline()
+        for (const friend of anotherInfo.friends) {
+            friend.nickname !==undefined ? asideOnline(friend.nickname, 'join') : null;
+        }
 }

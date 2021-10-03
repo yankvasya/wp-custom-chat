@@ -24,14 +24,12 @@ socket.addEventListener('message',  function (event) {
                     id: newMessage.id
                 }
             }
-            // newMessage.type = type;
-            // newMessage.payload = payload;
-            // delete newMessage.message
         }
     }
     parseMessage(event.data);
 
     const {type, payload} = newMessage;
+
     if (myId === undefined) {
         routeMessages(type, null, payload.id).then(r => r);
         myId = payload.id;
@@ -61,5 +59,29 @@ export function sendMessage() {
 export function sendInfo(info) {
     socket.send(info);
 }
+
+// просит разрешение на получение данных по кол-ву пользователей, текущему онлайну
+export function getDataBaseInfo() {
+    socket.send(JSON.stringify({type: "dataBaseInfo", payload: {id: myId}}));
+}
+
+// отправляет от лица олдов данные по текущему онлайну.
+// потом нужно будет отправлять только от имени одной персоны.
+export function sendDataBaseInfo(info, id) {
+    const {friends, online} = info;
+    const data = {
+        type: 'takeDataBaseInfo',
+        payload: {
+            friends: friends,
+            online: online,
+            length: friends.length,
+            id: id
+        }
+    }
+    friends.length > 0 ? socket.send(JSON.stringify(data)) : null;
+}
+
+
+
 
 

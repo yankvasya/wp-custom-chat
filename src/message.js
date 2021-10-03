@@ -57,6 +57,7 @@ export function addMessage(message, id) {
                 ? templateFull(Object.assign(parsedCookie, parsedMessage, fullTime, imageSrc))
                 : template(Object.assign(parsedCookie, parsedMessage, fullTime));
 
+
         // Если последнее сообщение было от друга или сообщения вовсе отсутствуют, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
         if (lastElement === null
@@ -80,10 +81,17 @@ export function addMessage(message, id) {
             lastElement === null
             || lastElement.classList.contains('me')
             || lastElement.classList.contains('join')
-            || lastElement.firstElementChild.textContent
-            !== whoSend
+            || lastElement.firstElementChild.textContent.length !== 0
+            && lastElement.firstElementChild.textContent !== whoSend
                 ? templateFull(Object.assign({nickname: whoSend}, parsedMessage, fullTime, another))
                 : template(Object.assign({nickname: whoSend}, parsedMessage, fullTime));
+
+        console.log(html)
+        console.log(lastElement === null)
+        console.log(lastElement.classList.contains('me'))
+        console.log(lastElement.classList.contains('join'))
+        console.log(lastElement.firstElementChild.textContent.length !== 0)
+
 
         // Если последнее сообщение было от меня или сообщения вовсе отсутствуют,, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня

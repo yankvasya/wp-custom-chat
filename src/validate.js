@@ -24,7 +24,8 @@ export function auth(e) {
                     const data = {
                         type: 'join',
                         payload: {
-                            nickname: nickname
+                            nickname: nickname,
+                            avatar: sessionStorage.getItem('recent-image') || 'https://i.ibb.co/znS6VSk/pngwing-com.png'
                         }
                     }
                     document.cookie = `nickname=${nickname}`;

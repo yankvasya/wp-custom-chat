@@ -17,7 +17,7 @@ const imgClose = document.querySelector('.img__close');
 const imgWindow = document.querySelector('.img');
 const imgSet = document.querySelector('.img__link');
 
-window.addEventListener('load', (e) => {
+window.addEventListener('load', () => {
     // loginWindow.classList.remove('hide');
     // loginWindow.classList.remove('none');
 });
@@ -76,10 +76,6 @@ imgClose.addEventListener('click', (e) => {
 
 let fileCategoryOpened = false;
 
-imgSet.addEventListener('click', (e) => {
-    fileCategoryOpened = true;
-});
-
 const testDiv = document.querySelector('.profile__picture');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -91,23 +87,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     imgSet.addEventListener('click', () => {
+        fileCategoryOpened = true;
         let imgError = document.querySelector('.img__error')
         imgError ? imgError.innerHTML = '' : null;
     });
 
     // при получение файла, меняет аватар
-    imgSet.addEventListener('change', function (e) {
+    imgSet.addEventListener('change', function () {
         if (this.files[0]) {
-            // Указал 2047, а не 2048, ибо у нас в sessionStorage также хранится информация об id и никнейме
-            const maxImgSize = Math.ceil(this.files[0].size / 1024) < 20; // mb
+            const maxImgSize = Math.ceil(this.files[0].size / 1024) < 2048; // mb
             maxImgSize ?
-                routeMessages('newAvatar', this).then()
+                 routeMessages('newAvatar', this).then() && imgCloseFunc()
                 :
                 badImgSize();
         }
     });
 });
 
+// Если изображение весит >= 2048 - появится ошибка
 function badImgSize() {
     const errorInfo = 'Максимально допустимый размер изображение превышен! (2047mb)';
     document.querySelector('.img__content').insertAdjacentHTML('afterend', `<div class="img__error">${errorInfo}</div>`);

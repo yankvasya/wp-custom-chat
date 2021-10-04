@@ -1,10 +1,9 @@
-import {getDataBaseInfo, sendDataBaseInfo} from "./websocket";
+import {getDataBaseInfo, sendDataBaseInfo, sendInfo} from "./websocket";
 
 let personInfo = {
     id: 0,
     nickname: '',
     avatar: 'https://i.ibb.co/znS6VSk/pngwing-com.png',
-    // avatar: document.querySelector('.profile__picture').src
 };
 
 let anotherInfo = {
@@ -54,9 +53,8 @@ export function addMessage(message, id) {
             lastElement === null
             || lastElement.classList.contains('friend')
             || lastElement.classList.contains('join')
-                ? templateFull(Object.assign(parsedCookie, parsedMessage, fullTime, imageSrc))
+                ? templateFull(Object.assign(personInfo, parsedMessage, fullTime))
                 : template(Object.assign(parsedCookie, parsedMessage, fullTime));
-
 
         // Если последнее сообщение было от друга или сообщения вовсе отсутствуют, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
@@ -71,28 +69,29 @@ export function addMessage(message, id) {
     } else {
         // Если сообщения вовсе отсутствуют или последнее было от МЕНЯ, то используется templateFull(с никнеймом и именем)
         // В ином случае используется html = обычный template
-        let whoSend;
+        const friendInfo = {};
         anotherInfo.friends.forEach((el) => {
             if (el.id === id) {
-                return whoSend = el.nickname;
+                friendInfo.nickname = el.nickname;
+                friendInfo.avatar = el.avatar;
             }
         });
+        console.log(friendInfo)
         html =
             lastElement === null
             || lastElement.classList.contains('me')
             || lastElement.classList.contains('join')
             || lastElement.firstElementChild.textContent.length !== 0
-            && lastElement.firstElementChild.textContent !== whoSend
-                ? templateFull(Object.assign({nickname: whoSend}, parsedMessage, fullTime, another))
-                : template(Object.assign({nickname: whoSend}, parsedMessage, fullTime));
+            && lastElement.firstElementChild.textContent !== friendInfo.nickname
+                ? templateFull(Object.assign(friendInfo, parsedMessage, fullTime))
+                : template(Object.assign(parsedMessage, fullTime));
 
         // Если последнее сообщение было от меня или сообщения вовсе отсутствуют,, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
         if (lastElement === null
             || lastElement.classList.contains('me')
             || lastElement.classList.contains('join')
-            || lastElement.firstElementChild.textContent
-            !== whoSend) {
+            || lastElement.firstElementChild.textContent !== friendInfo.nickname) {
             messageItem.classList.add('friend');
             messageContainer.appendChild(messageItem);
         } else {
@@ -128,15 +127,16 @@ export function giveNickname(nickname) {
 
 // Забрать из localstorage аватар
 function giveAvatar() {
-    if (localStorage.getItem('recent-image')) {
+    if (sessionStorage.getItem('recent-image')) {
         personInfo.avatar = sessionStorage.getItem('recent-image');
-        // personInfo.avatar = document.querySelector('.profile__picture').src;
+    } else {
+        personInfo.avatar ='https://i.ibb.co/znS6VSk/pngwing-com.png';
     }
 }
 
-export function addFriendInfo(nickname, id) {
+export function addFriendInfo(nickname, id, avatar) {
     return new Promise(() => {
-        anotherInfo.friends.push({id: id, nickname: nickname});
+        anotherInfo.friends.push({id: id, nickname: nickname, avatar: avatar});
         anotherInfo.online++;
         refreshOnline();
         eventOnTheChat(nickname, 'присоединился к чату');
@@ -205,7 +205,8 @@ export async function routeMessages(info, message, id) {
             await giveCookieId(id);
             break;
         case 'join':
-            await addFriendInfo(message.message.nickname, message.id);
+            // console.log(message.message.avatar)
+            await addFriendInfo(message.message.nickname, message.id, message.message.avatar);
             break;
         case 'dataBaseInfo':
             message.id !== personInfo.id ? sendDataBaseInfo(anotherInfo, message.id) : null;
@@ -216,6 +217,9 @@ export async function routeMessages(info, message, id) {
         case 'newAvatar':
             await newAvatar(message);
             break;
+        case 'friendChangeAvatar':
+            changeFriendAvatar(message.message.avatar, message.id);
+            break;
         default:
             break;
     }
@@ -223,29 +227,47 @@ export async function routeMessages(info, message, id) {
 
 // отвечает за счетчик онлайна
 function refreshOnline(){
-        const num = anotherInfo.online;
-        const onlineNumbers = document.querySelector('.chat__members');
+    const num = anotherInfo.online;
+    const onlineNumbers = document.querySelector('.chat__members');
+    variables(num);
 
-        // отвечает за склонение
-        function variables(num) {
-            const text = ['участник', 'участника', 'участников'];
-            if (num < 0) {
-                return;
-            }
-            if (num === 1 || num === 21) {
-                onlineNumbers.innerText = `${num} ${text[0]}`; // -К
-                return;
-            }
-            if (num > 1 || num < 5 || 21 < num < 25) {
-                onlineNumbers.innerText = `${num} ${text[1]}`; // -А
-                return;
-            }
-            if (num > 10 || num < 20 || num >= 25 || num === 0) {
-                onlineNumbers.innerText = `${num} ${text[2]}`; // -ОВ
-            }
+    // отвечает за склонение
+    function variables(num) {
+        const text = ['участник', 'участника', 'участников'];
+        if (num < 0) {
+            return;
+        }
+        if (num === 1 || num === 21) {
+            onlineNumbers.innerText = `${num} ${text[0]}`; // -К
+            return;
+        }
+        if (num > 1 || num < 5 || 21 < num < 25) {
+            onlineNumbers.innerText = `${num} ${text[1]}`; // -А
+            return;
+        }
+        if (num > 10 || num < 20 || num >= 25 || num === 0) {
+            onlineNumbers.innerText = `${num} ${text[2]}`; // -ОВ
         }
 
-        variables(num);
+        //switch почему-то не работает
+
+        // switch (num) {
+        //     case num < 0:
+        //         return
+        //         break;
+        //     case num === 1 || num === 21:
+        //         return onlineNumbers.innerText = `${num} ${text[0]}`; // -К
+        //         break;
+        //     case num > 1 || num < 5 || 21 < num < 25:
+        //         return onlineNumbers.innerText = `${num} ${text[1]}`; // -А
+        //         break;
+        //     case num > 10 || num < 20 || num >= 25 || num === 0:
+        //         return onlineNumbers.innerText = `${num} ${text[2]}`; // -ОВ
+        //         break;
+        //     default:
+        //         break;
+        // }
+    }
 }
 
 // данные пушит в anotherInfo (данные по чату, онлайн)
@@ -267,13 +289,28 @@ function newAvatar(that) {
         personInfo.avatar = reader.result;
 
         const testDiv = document.querySelector('.profile__picture');
-
         const newRecentImageDataUrl = sessionStorage.getItem('recent-image');
-        testDiv.style.display = 'none';
+        const data = {
+            type: 'friendChangeAvatar',
+            payload: {
+                avatar: newRecentImageDataUrl
+            }
+        }
+
+        console.log('do')
+        console.log(data)
+        sendInfo(JSON.stringify(data));
+        // testDiv.style.display = 'none';
         testDiv.src = `${newRecentImageDataUrl}`;
-        testDiv.style.display = 'block';
-
+        // testDiv.style.display = 'block';
     });
-    reader.readAsDataURL(that.files[0]);
 
+    reader.readAsDataURL(that.files[0]);
+}
+
+// Если друг сменит аватарку, то у всех запустится эта функция по замене аватарке в anotherInfo.friends
+function changeFriendAvatar(avatar, id) {
+    anotherInfo.friends.forEach((el) => {
+       el.id === id ? el.avatar = avatar : null;
+    });
 }

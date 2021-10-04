@@ -393,13 +393,29 @@ h1 {
     &__message {
       display: flex;
       margin-top: 4px;
+      padding: 8px 11px 8px 11px;
+      font-style: normal;
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 16px;
+      color: #FFF;
+      min-height: 33px;
+      border-radius: 5px;
 
-      .message {
-        &__text {
+      &.message {
+        //max-width: 250px;
+        overflow-wrap: break-word;
+
+
+        .message__text {
+          max-width: 200px;
+          overflow-wrap: break-word;
 
         }
 
-        &__time {
+        .message__time {
+          display: flex;
+          align-items: flex-end;
           cursor: pointer;
           margin: 5px 0 0 9px;
           font-style: normal;
@@ -414,15 +430,6 @@ h1 {
       &:first-child {
         margin-top: 7px;
       }
-
-      padding: 8px 7.5px 4px 11px;
-      font-style: normal;
-      font-weight: 300;
-      font-size: 14px;
-      line-height: 16px;
-      color: #FFF;
-      height: 33px;
-      border-radius: 5px;
     }
 
     &__nickname {

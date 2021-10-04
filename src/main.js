@@ -18,8 +18,8 @@ const imgWindow = document.querySelector('.img');
 const imgSet = document.querySelector('.img__link');
 
 window.addEventListener('load', () => {
-    // loginWindow.classList.remove('hide');
-    // loginWindow.classList.remove('none');
+    loginWindow.classList.remove('hide');
+    loginWindow.classList.remove('none');
 });
 
 // убирает поле с ошибкой

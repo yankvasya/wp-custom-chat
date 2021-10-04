@@ -1,9 +1,11 @@
 import {getDataBaseInfo, sendDataBaseInfo, sendInfo} from "./websocket";
 
+let standartAvatar = 'https://avavatar.ru/images/avatars/2/avatar_X45iWdICzBLrkbJs.jpg';
+
 let personInfo = {
     id: 0,
     nickname: '',
-    avatar: 'https://i.ibb.co/znS6VSk/pngwing-com.png',
+    avatar: standartAvatar,
 };
 
 let anotherInfo = {
@@ -18,7 +20,7 @@ export function addMessage(message, id) {
         imageSrc: personInfo.avatar
     };
     const another = {
-        imageSrc: 'https://i.ibb.co/znS6VSk/pngwing-com.png'
+        imageSrc: standartAvatar
     }
     const parsedMessage = {
         message: message
@@ -130,7 +132,7 @@ function giveAvatar() {
     if (sessionStorage.getItem('recent-image')) {
         personInfo.avatar = sessionStorage.getItem('recent-image');
     } else {
-        personInfo.avatar ='https://i.ibb.co/znS6VSk/pngwing-com.png';
+        personInfo.avatar = standartAvatar;
     }
 }
 
@@ -205,7 +207,6 @@ export async function routeMessages(info, message, id) {
             await giveCookieId(id);
             break;
         case 'join':
-            // console.log(message.message.avatar)
             await addFriendInfo(message.message.nickname, message.id, message.message.avatar);
             break;
         case 'dataBaseInfo':
@@ -297,8 +298,6 @@ function newAvatar(that) {
             }
         }
 
-        console.log('do')
-        console.log(data)
         sendInfo(JSON.stringify(data));
         // testDiv.style.display = 'none';
         testDiv.src = `${newRecentImageDataUrl}`;

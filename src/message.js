@@ -86,13 +86,6 @@ export function addMessage(message, id) {
                 ? templateFull(Object.assign({nickname: whoSend}, parsedMessage, fullTime, another))
                 : template(Object.assign({nickname: whoSend}, parsedMessage, fullTime));
 
-        console.log(html)
-        console.log(lastElement === null)
-        console.log(lastElement.classList.contains('me'))
-        console.log(lastElement.classList.contains('join'))
-        console.log(lastElement.firstElementChild.textContent.length !== 0)
-
-
         // Если последнее сообщение было от меня или сообщения вовсе отсутствуют,, то создай li и закинь его в ul
         // В ином случае запушь его в последнее ul от меня
         if (lastElement === null

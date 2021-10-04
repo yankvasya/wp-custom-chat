@@ -90,11 +90,28 @@ document.addEventListener('DOMContentLoaded', () => {
         testDiv.src = `${recentImageDataUrl}`;
     }
 
+    imgSet.addEventListener('click', () => {
+        let imgError = document.querySelector('.img__error')
+        imgError ? imgError.innerHTML = '' : null;
+    });
+
     // при получение файла, меняет аватар
     imgSet.addEventListener('change', function (e) {
-        routeMessages('newAvatar', this).then();
+        if (this.files[0]) {
+            // Указал 2047, а не 2048, ибо у нас в sessionStorage также хранится информация об id и никнейме
+            const maxImgSize = Math.ceil(this.files[0].size / 1024) < 20; // mb
+            maxImgSize ?
+                routeMessages('newAvatar', this).then()
+                :
+                badImgSize();
+        }
     });
 });
+
+function badImgSize() {
+    const errorInfo = 'Максимально допустимый размер изображение превышен! (2047mb)';
+    document.querySelector('.img__content').insertAdjacentHTML('afterend', `<div class="img__error">${errorInfo}</div>`);
+}
 
 // отвечает за закрытие модельки загрузки аватарки
 function imgCloseFunc() {

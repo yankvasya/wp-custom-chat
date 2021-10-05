@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CUSTOM CHAT | WP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container hide">
+<!--            hide, visible-->
+<!--            hidden-->
+            <aside class="aside hidden">
+                <ul class="aside__button">
+                    <li class="button__element"></li>
+                    <li class="button__element"></li>
+                    <li class="button__element"></li>
+                </ul>
+                <div class="aside__profile">
+                    <div class="profile">
+                        <a href="#" class="profile__img">
+                            <img class="profile__picture" src="https://avavatar.ru/images/avatars/2/avatar_X45iWdICzBLrkbJs.jpg" alt="avatar">
+                        </a>
+                        <div class="profile__nickname"></div>
+                    </div>
+                    <ul class="profile__nicknames">
+                        Онлайн:
+                    </ul>
+                </div>
+            </aside>
+
+            <div class="chat">
+                <div class="chat__header">
+                    <h3 class="chat__title">Чат</h3>
+                    <a href="#" id="allMembers" class="chat__members">0 участников</a>
+                </div>
+                <ul id="messageContainer" class="chat__all-messages">
+<!--                    Добавляй элементы сюда-->
+<!--                    <li class="member join">-->
+<!--                        <div class="member__join">-->
+<!--                            <div>-->
+<!--                                Енотик присоединился к чату-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="member friend">-->
+<!--                        <h4 class="member__nickname">Енотик</h4>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">Привет</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:30">21:30</time>-->
+<!--                        </div>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">Как дела?</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:30">21:30</time>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="member me">-->
+<!--                        <img class="member__img" src="https://i.ibb.co/znS6VSk/pngwing-com.png" alt="avatar">-->
+<!--                        <h4 class="member__nickname">Nik</h4>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">Привет!</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:31">21:31</time>-->
+<!--                        </div>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">Хорошо</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:31">21:31</time>-->
+<!--                        </div>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">А у тебя как?</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:31">21:31</time>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="member friend">-->
+<!--                        <img class="member__img" src="https://i.ibb.co/znS6VSk/pngwing-com.png" alt="avatar">-->
+<!--                        <h4 class="member__nickname">Енотик</h4>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">У меня тоже все хорошо</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:32">21:32</time>-->
+<!--                        </div>-->
+<!--                        <div class="member__message message">-->
+<!--                            <div class="message__text">Рад был пообщаться</div>-->
+<!--                            <time class="message__time" datetime="2020-09-30T21:32">21:32</time>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="member join">-->
+<!--                        <div class="member__join">-->
+<!--                            <div>-->
+<!--                                Енотик вышел из чата-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
+                </ul>
+                <div class="messaging">
+                    <label class="messaging__input-label"><input autocomplete="off" id="messageText" name="nickname" type="text" placeholder="Введите сообщение..." class="messaging__input"></label>
+                    <button id="sendMessage" type="submit" class="messaging__send-button">Отправить</button>
+                </div>
+            </div>
+        </div>
+
+<!--        hide, none-->
+        <div class="login hide none">
+            <img class="login__img" src="https://i.ibb.co/FxBFRxc/Group-1.png" alt="login img">
+            <h2 class="login__title">Авторизация</h2>
+            <p class="login__text">Введите пожалуйста свой ник для дальнейшей авторизации</p>
+            <label><input autocomplete="off" class="login__input" id="loginInput" name="nickname" type="text" placeholder="Введите свой ник"> </label>
+            <button class="login__submit" type="submit" id="login">Войти</button>
+            <span class="login__error"></span>
+            <div id="loginLoading" class="login__loading hide"></div>
+        </div>
+    </div>
+
+<!--    hidden, none-->
+    <div class="img hidden none">
+        <a href="#" class="img__close"></a>
+        <h4 class="img__title">Загрузка фото</h4>
+        <form class="img__content">
+            <label for="imageUpload">
+                <img src="https://i.ibb.co/0m3MXtN/Vector.png" alt="no photo" class="img__img">
+            <input id="imageUpload" accept=".jpg, .jpeg, .png" type="file" name="avatar" class="img__link">
+            </label>
+            <h3 class="img__nickname">Nickname</h3>
+        </form>
+    </div>
+
+    <script type="text" id="addFullMessageTemplate">
+        <h4 class="member__nickname">{{nickname}}</h4>
+        <img class="member__img" src={{avatar}}>
+        <div class="member__message message">
+        <div class="message__text">{{message}}</div>
+        <time class="message__time" datetime={{fullDate}}>{{currentTime}}</time>
+        </div>
+    </script>
+    <script type="text" id="addMessageTemplate">
+        <div class="member__message message">
+        <div class="message__text">{{message}}</div>
+        <time class="message__time" datetime={{fullDate}}>{{currentTime}}</time>
+        </div>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+</body>
+</html>
